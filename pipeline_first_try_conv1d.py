@@ -86,12 +86,10 @@ RECORD_LENGTH = 1280
 
 input_layer = tf.keras.Input(shape=(RECORD_LENGTH, 2))
 
-
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(input_layer)
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(x)
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(x)
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(x)
-
 
 x = tf.keras.layers.Flatten()(x)
 x = tf.keras.layers.Dense(384, activation='relu')(x)
