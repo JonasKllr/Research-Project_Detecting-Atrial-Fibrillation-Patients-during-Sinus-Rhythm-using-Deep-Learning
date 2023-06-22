@@ -46,23 +46,29 @@ for filename in sorted(os.listdir(directory)):
 
         
 # split data into train and test sets randomly
-train_data, test_data, train_labels, test_labels = train_test_split(
-    signals, labels, test_size=0.2, random_state=21
+#train_data, test_data, train_labels, test_labels = train_test_split(
+#    signals, labels, test_size=0.2, random_state=21
+#    )
+
+train_data_1, test_data_1, train_data_2, test_data_2, train_labels, test_labels = train_test_split(
+    signals[:,:,0], signals[:,:,1], labels, test_size=0.2, random_state=21
     )
 
-
+print(np.shape(train_labels))
+print(np.shape(test_labels))
 
 # normalize data
 min_val = tf.reduce_min(signals)
 max_val = tf.reduce_max(signals)
 
-train_data = (train_data - min_val) / (max_val - min_val)
-test_data = (test_data - min_val) / (max_val - min_val)
+#train_data = (train_data - min_val) / (max_val - min_val)
+#test_data = (test_data - min_val) / (max_val - min_val)
 
 
 
-train_data = tf.data.Dataset.from_tensor_slices((train_data, train_labels))
-test_data = tf.data.Dataset.from_tensor_slices((test_data, test_labels))
+train_data = tf.data.Dataset.from_tensor_slices(((train_data_1, train_data_2), train_labels))
+#train_data = tf.data.Dataset.from_tensor_slices(([train_data[:,:,0], train_data[:,:,1]], train_labels))
+#test_data = tf.data.Dataset.from_tensor_slices((test_data_1, test_data_2, test_labels))
 
 print(train_data.element_spec)
 print(list(train_data.as_numpy_iterator())[0])
@@ -75,7 +81,7 @@ print(list(train_data.as_numpy_iterator())[0])
 
 BATCH_SIZE = 1
 train_data = train_data.batch(BATCH_SIZE)
-test_data = test_data.batch(1)
+#test_data = test_data.batch(1)
 
 
 
@@ -84,9 +90,13 @@ test_data = test_data.batch(1)
 
 RECORD_LENGTH = 1280
 
-input_layer = tf.keras.Input(shape=(RECORD_LENGTH, 2))
+input_layer_1 = tf.keras.Input(shape=(RECORD_LENGTH, 1))
+input_layer_2 = tf.keras.Input(shape=(RECORD_LENGTH, 1))
 
-x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(input_layer)
+concatenate = tf.keras.layers.concatenate([input_layer_1, input_layer_2])
+
+
+x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(concatenate)
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(x)
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(x)
 x = tf.keras.layers.Conv1D(filters=32, kernel_size=10, strides=3, activation='relu')(x)
@@ -97,7 +107,7 @@ x = tf.keras.layers.Dense(384, activation='relu')(x)
 output_layer = tf.keras.layers.Dense(1, activation='softmax')(x)
 
 
-model = tf.keras.Model(inputs=input_layer, outputs=output_layer)
+model = tf.keras.Model(inputs=[input_layer_1, input_layer_2], outputs=output_layer)
 
 model.compile(optimizer='adam',
               loss=tf.keras.losses.BinaryCrossentropy(from_logits=False),
@@ -107,7 +117,7 @@ print(model.summary())
 
 model.fit(train_data,
           epochs = 20,
-          validation_data = test_data
+          #validation_data = test_data
           )
 
 del model
