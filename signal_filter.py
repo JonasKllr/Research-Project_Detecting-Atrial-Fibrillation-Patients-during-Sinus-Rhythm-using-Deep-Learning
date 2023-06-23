@@ -27,15 +27,16 @@ lowcut = 10.0
 highcut = 60.0
 
 # filter order
-order = 8   # value taken from paper
+order = 5   # value 8 taken from paper (but might be too high for my usecase)
 
 
 # Filter a noisy signal.
-DURATION_SECONDS = 10.0
+DURATION_SECONDS = 10
 nsamples = int(DURATION_SECONDS * FREQUENCY)
 t = np.linspace(0, DURATION_SECONDS, nsamples, endpoint=False)
 
-record = wfdb.rdrecord('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/1.0.0/n02', sampto=1280, channels=[1])
+ONE_SECOND = 128
+record = wfdb.rdrecord('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/n02',sampfrom=int(0), sampto=int(DURATION_SECONDS*ONE_SECOND), channels=[0, 1])
 x = record.p_signal
 
 
@@ -45,6 +46,7 @@ plt.plot(t, x, label='Original signal')
 
 y = butter_bandpass_filter(x, lowcut, highcut, FREQUENCY, order=order)
 print(np.shape(y))
+print(type(y))
 
 plt.plot(t, y, label='Filtered signal')
 plt.xlabel('time (seconds)')

@@ -8,7 +8,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 #from tensorflow.keras import datasets, layers, models
 
-directory = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/1.0.0/"
+directory = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
 
 signals = np.empty((200, 1280, 2)) # TODO make it dynamic depending on number of records (record_count)
 labels = np.empty(200)  # TODO make it dynamic depending on number of records (record_count)
