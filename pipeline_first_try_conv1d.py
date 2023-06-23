@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-import wfdb
 import tensorflow as tf
+import wfdb
 
 
 from sklearn.model_selection import train_test_split

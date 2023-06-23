@@ -8,7 +8,7 @@ DS_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/ph
 SECONDS_10 = 1280
 
 
-record_1 = wfdb.rdrecord(DS_DIRECTORY + 'n02')
+record_1 = wfdb.rdrecord(DS_DIRECTORY + 'n01')
 #record_1 = wfdb.rdrecord(DS_DIRECTORY + 'n01', sampfrom=int(SECONDS_10*180 - SECONDS_10), sampto=int(SECONDS_10*180))
 #record_2 = wfdb.rdrecord(DS_DIRECTORY + 'n02', sampto=int(SECONDS_10 * 2))
 #record_3 = wfdb.rdrecord(DS_DIRECTORY + 'n03', sampto=int(SECONDS_10 * 2))
