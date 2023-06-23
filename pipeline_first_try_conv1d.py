@@ -8,13 +8,13 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 #from tensorflow.keras import datasets, layers, models
 
-directory = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
+DIRECTORY = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
 
-signals = np.empty((200, 1280, 2)) # TODO make it dynamic depending on number of records (record_count)
-labels = np.empty(200)  # TODO make it dynamic depending on number of records (record_count)
+signals = np.empty((100, 1280, 2)) # TODO make it dynamic depending on number of records (record_count)
+labels = np.empty(100)  # TODO make it dynamic depending on number of records (record_count)
 
 record_count = 0
-for filename in sorted(os.listdir(directory)):
+for filename in sorted(os.listdir(DIRECTORY)):
     
     # only do data integration once per record
     if filename.endswith('.dat'):
@@ -23,7 +23,7 @@ for filename in sorted(os.listdir(directory)):
         if (os.path.basename(filename)[0] == 'p'):
             filename_without_ext = os.path.splitext(filename)[0]
 
-            file_directory = directory + os.sep + filename_without_ext
+            file_directory = DIRECTORY + os.sep + filename_without_ext
             signals[record_count, :, :] = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=1280)[0]
             labels[record_count] = 1
 
@@ -33,7 +33,7 @@ for filename in sorted(os.listdir(directory)):
         elif (os.path.basename(filename)[0] == 'n'):
             filename_without_ext = os.path.splitext(filename)[0]
 
-            file_directory = directory + os.sep + filename_without_ext
+            file_directory = DIRECTORY + os.sep + filename_without_ext
             signals[record_count, :, :] = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=1280)[0]
             labels[record_count] = 0
 
@@ -54,8 +54,13 @@ train_data_1, test_data_1, train_data_2, test_data_2, train_labels, test_labels 
     signals[:,:,0], signals[:,:,1], labels, test_size=0.2, random_state=21
     )
 
-print(np.shape(train_labels))
+
+print(np.shape(train_data_1))
 print(np.shape(test_labels))
+
+print(train_data_2[1,:])
+
+
 
 # normalize data
 min_val = tf.reduce_min(signals)
