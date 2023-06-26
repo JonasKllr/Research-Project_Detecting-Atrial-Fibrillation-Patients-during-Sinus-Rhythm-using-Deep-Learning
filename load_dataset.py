@@ -97,14 +97,34 @@ def main():
     print(train_data.element_spec)
     print(list(train_data.as_numpy_iterator())[0])
 
-    #plt.grid()
-    #plt.plot(np.arange(1280), train_data_1[0])
-    #plt.title("A Normal ECG")
-    #plt.show()
+    # from here only for plotting the signal
+    RECORD_DURATION_SECONDS = 10
+    nsamples = int(RECORD_DURATION_SECONDS * FREQUENCY_HERTZ)
+    t = np.linspace(0, RECORD_DURATION_SECONDS, nsamples, endpoint=False)
+
+    #x = list(train_data.as_numpy_iterator())[1]
+    x = train_data_1[0, :]
+
+
+    plt.figure(2)
+    plt.clf()
+    plt.plot(t, x, label='Original signal')
+
+    #y = butter_bandpass_filter(x, lowcut, highcut, FREQUENCY_HERTZ, order)
+    #print(np.shape(y))
+    #print(type(y))
+
+    #plt.plot(t, y, label='Filtered signal')
+    #plt.xlabel('time (seconds)')
+    #plt.grid(True)
+    #plt.axis('tight')
+    #plt.legend(loc='upper left')
+
+    plt.show()
 
 
     BATCH_SIZE = 1
     train_data = train_data.batch(BATCH_SIZE)
     #test_data = test_data.batch(1)
 
-main()
+#main()
