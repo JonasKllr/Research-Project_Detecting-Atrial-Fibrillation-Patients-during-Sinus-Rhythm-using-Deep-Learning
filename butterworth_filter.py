@@ -20,19 +20,20 @@ def butter_bandpass_filter(data, lowcut, highcut, FREQUENCY_HERTZ, order):
     return lfilter(b, a, data)
 
 
-def main():
+# TESTS
+if __name__ == '__main__':
     # set record parameters
-    RECORD_DURATION_SECONDS = 10
+    RECORD_DURATION_SECONDS = 1800
     FREQUENCY_HERTZ = 128.0
 
     # set filter parameters
-    lowcut = 10.0
+    lowcut = 8.0
     highcut = 60.0
     order = 5   # value 8 taken from paper (but might be too high for my usecase)
 
     #set path 
     ONE_SECOND = 128
-    record = wfdb.rdrecord('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/n02',sampfrom=int(0), sampto=int(RECORD_DURATION_SECONDS*ONE_SECOND), channels=[0, 1])
+    record = wfdb.rdrecord('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/n03',sampfrom=int(0), sampto=int(RECORD_DURATION_SECONDS*ONE_SECOND), channels=[0])
 
 
 
@@ -57,6 +58,7 @@ def main():
     plt.axis('tight')
     plt.legend(loc='upper left')
 
-    plt.show()
+    SAFE_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/'
+    #plt.savefig(SAFE_DIRECTORY + 'n01_filtered.png')
 
-#main()
+    plt.show()

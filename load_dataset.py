@@ -55,9 +55,9 @@ def load_dataset_PAF(DIRECTORY, lowcut, highcut, FREQUENCY_HERTZ, order):
 
 
 
-def main():
-    # TESTS
-
+# TESTS
+if __name__ == '__main__':
+    
     DIRECTORY = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
     lowcut = 10.0
     highcut = 60.0
@@ -83,8 +83,11 @@ def main():
 
 
     # normalize data
-    min_val = tf.reduce_min(signals)
-    max_val = tf.reduce_max(signals)
+    #min_val = tf.reduce_min(signals)
+    #max_val = tf.reduce_max(signals)
+
+    min_val = signals.min()
+    max_val = signals.max()
 
     #train_data = (train_data - min_val) / (max_val - min_val)
     #test_data = (test_data - min_val) / (max_val - min_val)
@@ -102,13 +105,15 @@ def main():
     nsamples = int(RECORD_DURATION_SECONDS * FREQUENCY_HERTZ)
     t = np.linspace(0, RECORD_DURATION_SECONDS, nsamples, endpoint=False)
 
+
     #x = list(train_data.as_numpy_iterator())[1]
     x = train_data_1[0, :]
-
+    
 
     plt.figure(2)
     plt.clf()
     plt.plot(t, x, label='Original signal')
+
 
     #y = butter_bandpass_filter(x, lowcut, highcut, FREQUENCY_HERTZ, order)
     #print(np.shape(y))
@@ -127,4 +132,4 @@ def main():
     train_data = train_data.batch(BATCH_SIZE)
     #test_data = test_data.batch(1)
 
-#main()
+
