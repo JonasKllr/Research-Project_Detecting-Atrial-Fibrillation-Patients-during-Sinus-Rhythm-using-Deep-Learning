@@ -9,6 +9,7 @@ from sklearn.preprocessing import normalize
 
 from load_dataset_without_filter import load_dataset_PAF
 from butterworth_filter import butter_bandpass_filter, butter_bandpass
+from filter_clipped_segments import clipping_filter_normalized_signal
 
 def normalize_ecg(raw_signals):
     return normalize(raw_signals, norm='max')
@@ -55,6 +56,8 @@ print(np.shape(test_data_1))
 print(np.shape(test_data_2))
 print(np.shape(train_labels))
 print(np.shape(test_labels))
+
+train_data_1, train_data_2, train_labels = clipping_filter_normalized_signal(train_data_1, train_data_2, train_labels)
 
 
 

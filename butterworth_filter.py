@@ -23,12 +23,12 @@ def butter_bandpass_filter(data, lowcut, highcut, FREQUENCY_HERTZ, order):
 # TESTS
 if __name__ == '__main__':
     # set record parameters
-    RECORD_DURATION_SECONDS = 1800
+    RECORD_DURATION_SECONDS = 10
     FREQUENCY_HERTZ = 128.0
 
     # set filter parameters
-    lowcut = 8.0
-    highcut = 60.0
+    lowcut = 0.3
+    highcut = 50.0
     order = 5   # value 8 taken from paper (but might be too high for my usecase)
 
     #set path 

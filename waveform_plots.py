@@ -3,6 +3,8 @@ import numpy as np
 import os
 import wfdb
 
+from butterworth_filter import butter_bandpass_filter, butter_bandpass
+
 
 DS_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/'
 SECONDS_10 = 1280
@@ -29,3 +31,9 @@ SAFE_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/
 #save_figure.savefig(SAFE_DIRECTORY + 'n01.png')
 
 
+ONE_SECOND = 128
+RECORD_START = 950
+RECORD_END = 952
+
+print(np.shape(record_1.p_signal))
+print(record_1.p_signal[RECORD_START*ONE_SECOND : RECORD_END*ONE_SECOND, 1])

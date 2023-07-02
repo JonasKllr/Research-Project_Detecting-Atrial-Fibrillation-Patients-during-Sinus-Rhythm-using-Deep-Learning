@@ -7,7 +7,7 @@ import wfdb
 from sklearn.model_selection import train_test_split
 
 from butterworth_filter import butter_bandpass_filter, butter_bandpass
-
+#from filter_clipped_segments import clipping_filter
 
 
 # load data from PAF prediction challenge
@@ -34,9 +34,13 @@ def load_dataset_PAF(DIRECTORY):
 
                 # split records into 10 sec 
                 signals_temp = np.split(signals_temp, indices_or_sections=180)
+                
+                # filter out 10 sec segments with signal clipping
+                #signals_temp = clipping_filter(signals_temp)
+
                 signals = np.append(signals, signals_temp, axis=0)
 
-                lables_temp = np.full(180, 1)   #label
+                lables_temp = np.full(180, 1)   # TODO make length dependent on length of signals_temp
                 labels = np.append(labels, lables_temp)
 
 
@@ -52,7 +56,11 @@ def load_dataset_PAF(DIRECTORY):
                 signals_temp[LAST_SAMPLE] = signals_temp[LAST_SAMPLE-1]
 
                 # split records into 10 sec 
-                signals_temp = np.split(signals_temp, indices_or_sections=180)            
+                signals_temp = np.split(signals_temp, indices_or_sections=180)
+                
+                # filter out 10 sec segments with signal clipping
+                #signals_temp = clipping_filter(signals_temp)
+
                 signals = np.append(signals, signals_temp, axis=0)
 
                 lables_temp = np.full(180, 0)   # label
