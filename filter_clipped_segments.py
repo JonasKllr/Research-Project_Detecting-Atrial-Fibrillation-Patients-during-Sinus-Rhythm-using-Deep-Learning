@@ -35,6 +35,17 @@ def clipping_filter_normalized_signal(signals, labels):
 
 
 
+def clipping_filter_normalized_signal_sliding_window(signals, labels):
+    CLIPPING_WINDOW = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+    
+    window_view = np.lib.stride_tricks.sliding_window_view(signals, window_shape=np.shape(CLIPPING_WINDOW)[0], axis=1)
+    rows_to_delete = np.where((np.all(np.equal(abs(window_view), CLIPPING_WINDOW), axis=3)))[0]
+    
+    signals_deleted = np.delete(signals, rows_to_delete, axis=0)
+    labels_deleted = np.delete(labels, rows_to_delete, axis=0)
+
+    return signals_deleted, labels_deleted
+
 
 
 
