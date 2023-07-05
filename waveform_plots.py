@@ -32,8 +32,10 @@ SAFE_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/
 
 
 ONE_SECOND = 128
-RECORD_START = 950
-RECORD_END = 952
+RECORD_START = 896
+RECORD_END = 898
 
-print(np.shape(record_1.p_signal))
-print(record_1.p_signal[RECORD_START*ONE_SECOND : RECORD_END*ONE_SECOND, 1])
+#print(np.shape(record_1.p_signal))
+print(record_1.p_signal[RECORD_START*ONE_SECOND : RECORD_END*ONE_SECOND, 0])
+
+print(record_1.p_signal.min())
