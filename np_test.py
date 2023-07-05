@@ -9,7 +9,7 @@ from sklearn.preprocessing import normalize
 
 from load_dataset_without_filter import load_dataset_PAF
 from butterworth_filter import butter_bandpass_filter, butter_bandpass
-from filter_clipped_segments import clipping_filter_normalized_signal
+from filter_clipped_segments import clipping_filter_normalized_signal_sliding_window
 
 def normalize_ecg(raw_signals):
     return normalize(raw_signals, norm='max')
@@ -19,6 +19,21 @@ file_directory = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/
 signals, labels = load_dataset_PAF(file_directory)
 
 print(np.shape(signals))
+
+# data normalization into range [-1.0, 1.0]
+signals[:,:,0] = normalize(signals[:,:,0], norm='max', axis=1)
+signals[:,:,1] = normalize(signals[:,:,1], norm='max', axis=1)
+
+print(signals.max())
+print(signals.min())
+
+# deleting 10 sec segments which contain signal clipping
+signals, labels = clipping_filter_normalized_signal_sliding_window(signals, labels)
+
+print(np.shape(signals))
+print(np.shape(labels))
+
+
 
 train_data_1, test_data_1, train_data_2, test_data_2, train_labels, test_labels = train_test_split(
         signals[:,:,0], signals[:,:,1], labels, test_size=0.2, random_state=21
@@ -45,19 +60,19 @@ print(np.shape(test_data_2))
 print(np.shape(train_labels))
 print(np.shape(test_labels))
 
-train_data_1 = normalize(train_data_1, norm='max')
-train_data_2 = normalize(train_data_2, norm='max')
-test_data_1 = normalize(test_data_1, norm='max')
-test_data_2 = normalize(test_data_2, norm='max')
+#train_data_1 = normalize(train_data_1, norm='max')
+#train_data_2 = normalize(train_data_2, norm='max')
+#test_data_1 = normalize(test_data_1, norm='max')
+#test_data_2 = normalize(test_data_2, norm='max')
 
-print(np.shape(train_data_1))
-print(np.shape(train_data_2))
-print(np.shape(test_data_1))
-print(np.shape(test_data_2))
-print(np.shape(train_labels))
-print(np.shape(test_labels))
+#print(np.shape(train_data_1))
+#print(np.shape(train_data_2))
+#print(np.shape(test_data_1))
+#print(np.shape(test_data_2))
+#print(np.shape(train_labels))
+#print(np.shape(test_labels))
 
-train_data_1, train_data_2, train_labels = clipping_filter_normalized_signal(train_data_1, train_data_2, train_labels)
+#train_data_1, train_data_2, train_labels = clipping_filter_normalized_signal(train_data_1, train_data_2, train_labels)
 
 
 
