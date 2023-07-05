@@ -101,7 +101,7 @@ if __name__ == '__main__':
     
 
     plt.bar(bins[:-1], signals_flat, width=np.diff(bins))
-    #plt.ylim(0, 10)
+    #plt.ylim(0, 50)
     plt.show()
 
 
