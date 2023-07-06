@@ -9,7 +9,7 @@ from sklearn.preprocessing import normalize
 
 from load_dataset_without_filter import load_dataset_PAF
 from butterworth_filter import butter_bandpass_filter, butter_bandpass
-from filter_clipped_segments import clipping_filter_normalized_signal_sliding_window
+from filter_clipped_segments import clipping_filter_normalized_signal
 
 def normalize_ecg(raw_signals):
     return normalize(raw_signals, norm='max')
@@ -28,7 +28,7 @@ print(signals.max())
 print(signals.min())
 
 # deleting 10 sec segments which contain signal clipping
-signals, labels = clipping_filter_normalized_signal_sliding_window(signals, labels)
+signals, labels = clipping_filter_normalized_signal(signals, labels)
 
 print(np.shape(signals))
 print(np.shape(labels))
