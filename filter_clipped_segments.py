@@ -10,11 +10,15 @@ from sklearn.model_selection import train_test_split
 
 def clipping_filter_normalized_signal(signals, labels):
     # set content of window to be searched for
-    CLIPPING_WINDOW = np.array([1.0, 1.0, 1.0, 1.0, 1.0])
+    WINDOW_SIZE = 5
+    clipping_window_0 = np.full((WINDOW_SIZE,), 0.0)
+    clipping_window_1 = np.full((WINDOW_SIZE,), 1.0)
     
     # slide window over signals and get rows where CLIPPING_WINDOW and signals match
-    window_view = np.lib.stride_tricks.sliding_window_view(signals, window_shape=np.shape(CLIPPING_WINDOW)[0], axis=1)
-    rows_to_delete = np.where((np.all(np.equal(abs(window_view), CLIPPING_WINDOW), axis=3)))[0]
+    window_view = np.lib.stride_tricks.sliding_window_view(signals, window_shape=WINDOW_SIZE, axis=1)
+    rows_to_delete_0 = np.where((np.all(np.equal(abs(window_view), clipping_window_0), axis=3)))[0]
+    rows_to_delete_1 = np.where((np.all(np.equal(abs(window_view), clipping_window_1), axis=3)))[0]
+    rows_to_delete = np.concatenate([rows_to_delete_0, rows_to_delete_1])
     
     signals_deleted = np.delete(signals, rows_to_delete, axis=0)
     labels_deleted = np.delete(labels, rows_to_delete, axis=0)
@@ -25,14 +29,14 @@ def clipping_filter_normalized_signal(signals, labels):
 
 if __name__ == '__main__':
     
-    a = np.array([[0, 0, 1, 1],
-                  [0, 0, 5, 0],
-                  [0, 0, 1, 0]]
+    a = np.array([[0, 0, 1, 1, 3],
+                  [0, 0, 5, 0, 3],
+                  [0, 0, 1, 0, 3]]
                   )
     
-    d = np.array([[0, 0, 1, 0],
-                  [0, 0, 0, 0],
-                  [1, 0, 0, 0]]
+    d = np.array([[0, 0, 1, 0, 5],
+                  [0, 0, 0, 0, 5],
+                  [1, 0, 0, 0, 5]]
                   )
     
     labels = np.array([0, 1, 0])
