@@ -20,9 +20,6 @@ def normalize_ecg(signals):
 
     # normalize signals: y = (x - min(x)) / (max(x) - min(x))
     signals_norm = np.ones_like(signals)
-    #signals_norm[:,:,0] = (signals[:,:,0]- min_val_0) / (max_val_0 - min_val_0)
-    #signals_norm[:,:,1] = (signals[:,:,1]- min_val_1) / (max_val_1 - min_val_1)
-
     np.divide((signals[:,:,0]- min_val_0), (max_val_0 - min_val_0), out=signals_norm[:,:,0], where=(max_val_0 - min_val_0) != 0)
     np.divide((signals[:,:,1]- min_val_1), (max_val_1 - min_val_1), out=signals_norm[:,:,1], where=(max_val_1 - min_val_1) != 0)
 
