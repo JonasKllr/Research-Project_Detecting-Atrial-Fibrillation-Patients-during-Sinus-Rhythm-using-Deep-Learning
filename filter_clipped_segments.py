@@ -19,8 +19,6 @@ def clipping_filter_normalized_signal(signals, labels):
     rows_to_delete_0 = np.where((np.all(np.equal(abs(window_view), clipping_window_0), axis=3)))[0]
     rows_to_delete_1 = np.where((np.all(np.equal(abs(window_view), clipping_window_1), axis=3)))[0]
     rows_to_delete = np.concatenate([rows_to_delete_0, rows_to_delete_1])
-
-    np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/deleted_segments/deleted_rows_with_clippting.txt', rows_to_delete, fmt='%.1f')
     
     signals_deleted = np.delete(signals, rows_to_delete, axis=0)
     labels_deleted = np.delete(labels, rows_to_delete, axis=0)
