@@ -19,14 +19,10 @@ def normalize_ecg(signals):
     max_val_1 = max_val_1[:, np.newaxis]
 
     # normalize signals: y = (x - min(x)) / (max(x) - min(x))
-    #signals_norm = np.ones_like(signals)
-    signals_norm = np.empty_like(signals)
-    #np.divide((signals[:,:,0]- min_val_0), (max_val_0 - min_val_0), out=signals_norm[:,:,0], where=(max_val_0 - min_val_0) != 0)
-    #np.divide((signals[:,:,1]- min_val_1), (max_val_1 - min_val_1), out=signals_norm[:,:,1], where=(max_val_1 - min_val_1) != 0)
-    np.divide((signals[:,:,0]- min_val_0), (max_val_0 - min_val_0), out=signals_norm[:,:,0])
-    np.divide((signals[:,:,1]- min_val_1), (max_val_1 - min_val_1), out=signals_norm[:,:,1])
-    np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/deleted_segments/normalized_with_nan_0.txt', signals_norm[:,:,0], fmt='%.1f')
-    np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/deleted_segments/normalized_with_nan_1.txt', signals_norm[:,:,1], fmt='%.1f')
+    signals_norm = np.ones_like(signals)
+    np.divide((signals[:,:,0]- min_val_0), (max_val_0 - min_val_0), out=signals_norm[:,:,0], where=(max_val_0 - min_val_0) != 0)
+    np.divide((signals[:,:,1]- min_val_1), (max_val_1 - min_val_1), out=signals_norm[:,:,1], where=(max_val_1 - min_val_1) != 0)
+    
 
     return signals_norm
 
