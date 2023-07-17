@@ -4,7 +4,7 @@ import numpy as np
 import os
 import wfdb
 
-from scipy.signal import butter, lfilter, freqz
+from scipy.signal import butter, lfilter
 
 
 def butter_bandpass(lowcut, highcut, FREQUENCY_HERTZ, order):

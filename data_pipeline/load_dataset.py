@@ -1,10 +1,13 @@
+import sys
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import tensorflow as tf
 import wfdb
 
-from butterworth_filter import butter_bandpass_filter, butter_bandpass
+from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
 
 from sklearn.model_selection import train_test_split
 

@@ -1,7 +1,10 @@
+import sys
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
+
 import matplotlib.pyplot as plt
 import numpy as np
 
-from filter_clipped_segments import clipping_filter_normalized_signal_sliding_window
+from data_pipeline.filter_clipped_segments import clipping_filter_normalized_signal_sliding_window
 
 
 if __name__ == '__main__':

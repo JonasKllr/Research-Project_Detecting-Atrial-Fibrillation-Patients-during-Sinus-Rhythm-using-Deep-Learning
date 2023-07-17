@@ -7,8 +7,8 @@ import wfdb
 from scipy.signal import butter, lfilter, freqz
 from sklearn.model_selection import train_test_split
 
-from butterworth_filter import butter_bandpass_filter, butter_bandpass
-from load_dataset import load_dataset_PAF
+from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
+from data_pipeline.load_dataset import load_dataset_PAF
 
 
 # turn off GPU usage

@@ -1,18 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 import tensorflow as tf
-import wfdb
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import normalize
 
-from load_dataset_without_filter import load_dataset_PAF
-from butterworth_filter import butter_bandpass_filter, butter_bandpass
-from filter_clipped_segments import clipping_filter_normalized_signal
+from data_pipeline.load_dataset_without_filter import load_dataset_PAF
+from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
+from data_pipeline.filter_clipped_segments import clipping_filter_normalized_signal
+from data_pipeline.normalize import normalize_ecg
 
-def normalize_ecg(raw_signals):
-    return normalize(raw_signals, norm='max')
 
 
 file_directory = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
@@ -21,11 +18,15 @@ signals, labels = load_dataset_PAF(file_directory)
 print(np.shape(signals))
 
 # data normalization into range [-1.0, 1.0]
-signals[:,:,0] = normalize(signals[:,:,0], norm='max', axis=1)
-signals[:,:,1] = normalize(signals[:,:,1], norm='max', axis=1)
+#signals[:,:,0] = normalize(signals[:,:,0], norm='max', axis=1)
+#signals[:,:,1] = normalize(signals[:,:,1], norm='max', axis=1)
+#signals[:,:,0] = normalize_ecg(signals[:,:,0])
+signals = normalize_ecg(signals)
+
 
 print(signals.max())
 print(signals.min())
+print(signals)
 
 # deleting 10 sec segments which contain signal clipping
 signals, labels = clipping_filter_normalized_signal(signals, labels)

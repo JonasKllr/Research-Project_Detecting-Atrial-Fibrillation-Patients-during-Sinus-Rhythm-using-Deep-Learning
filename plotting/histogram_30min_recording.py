@@ -1,3 +1,6 @@
+import sys
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -6,7 +9,7 @@ import wfdb
 
 from sklearn.model_selection import train_test_split
 
-from butterworth_filter import butter_bandpass_filter, butter_bandpass
+from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
 
 
 DS_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/'
