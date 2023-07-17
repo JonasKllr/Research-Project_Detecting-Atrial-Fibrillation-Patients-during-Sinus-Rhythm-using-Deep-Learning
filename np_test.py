@@ -3,7 +3,6 @@ import numpy as np
 import tensorflow as tf
 
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import normalize
 
 from data_pipeline.load_dataset_without_filter import load_dataset_PAF
 from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
