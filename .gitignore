@@ -4,4 +4,5 @@
 
 ./data_pipeline/__pycache__/
 
+*.pcy
 #
