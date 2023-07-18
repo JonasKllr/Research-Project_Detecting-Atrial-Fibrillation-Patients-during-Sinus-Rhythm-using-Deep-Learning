@@ -1,8 +1,5 @@
-# /media/jonas/SSD_new/CMS/Semester_4/research_project/scripts/__pycache__/
-
-./__pycache__/
-
-./data_pipeline/__pycache__/
+__pycache__/
+data_pipeline/__pycache__/
 
 *.pcy
-#
+
