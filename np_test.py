@@ -4,6 +4,7 @@ import tensorflow as tf
 
 from sklearn.model_selection import train_test_split
 
+#from data_pipeline.load_dataset import load_dataset_PAF
 from data_pipeline.load_dataset_without_filter import load_dataset_PAF
 from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
 from data_pipeline.filter_clipped_segments import clipping_filter_normalized_signal
@@ -12,7 +13,13 @@ from data_pipeline.normalize import normalize_ecg
 
 
 file_directory = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
+LOWCUT = 0.3
+HIGHCUT = 50
+FREQUENCY_HERTZ = 128
+ORDER = 5
+
 signals, labels = load_dataset_PAF(file_directory)
+#signals, labels = load_dataset_PAF(file_directory, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
 
 print(np.shape(signals))
 
