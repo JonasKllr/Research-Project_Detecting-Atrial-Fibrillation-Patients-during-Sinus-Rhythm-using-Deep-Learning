@@ -21,7 +21,7 @@ def clipping_filter_normalized_signal(signals, labels):
     rows_to_delete = np.concatenate([rows_to_delete_0, rows_to_delete_1])
 
     # save rows_to_delete to file
-    np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/deleted_segments/np_arrays/deleted_rows_with_clippting_window6.txt', rows_to_delete, fmt='%.1f')
+    #np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/deleted_segments/np_arrays/deleted_rows_with_clippting_window6_with_filter.txt', rows_to_delete, fmt='%.1f')
     
     signals_deleted = np.delete(signals, rows_to_delete, axis=0)
     labels_deleted = np.delete(labels, rows_to_delete, axis=0)
@@ -29,6 +29,26 @@ def clipping_filter_normalized_signal(signals, labels):
     return signals_deleted, labels_deleted
 
 
+def find_clipped_segments(signals):
+    # set content of window to be searched for
+    WINDOW_SIZE = 6
+    clipping_window_0 = np.full((WINDOW_SIZE,), 0.0)
+    clipping_window_1 = np.full((WINDOW_SIZE,), 1.0)
+    
+    # slide window over signals and get rows where CLIPPING_WINDOW and signals match
+    window_view = np.lib.stride_tricks.sliding_window_view(signals, window_shape=WINDOW_SIZE, axis=1)
+    rows_to_delete_0 = np.where((np.all(np.equal(abs(window_view), clipping_window_0), axis=3)))[0]
+    rows_to_delete_1 = np.where((np.all(np.equal(abs(window_view), clipping_window_1), axis=3)))[0]
+
+    return np.concatenate([rows_to_delete_0, rows_to_delete_1])
+
+
+def delete_clipped_segments(signals, labels, ROWS_TO_DELETE):
+    
+    signals_deleted = np.delete(signals, ROWS_TO_DELETE, axis=0)
+    labels_deleted = np.delete(labels, ROWS_TO_DELETE, axis=0)
+
+    return signals_deleted, labels_deleted
 
 if __name__ == '__main__':
     
