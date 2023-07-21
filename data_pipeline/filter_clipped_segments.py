@@ -30,8 +30,11 @@ def clipping_filter_normalized_signal(signals, labels):
 
 
 def find_clipped_segments(signals):
-    # set content of window to be searched for
-    WINDOW_SIZE = 6
+
+    print('Searching for clipped segments ...')
+
+    # content of window to be searched for
+    WINDOW_SIZE = 8
     clipping_window_0 = np.full((WINDOW_SIZE,), 0.0)
     clipping_window_1 = np.full((WINDOW_SIZE,), 1.0)
     
@@ -45,10 +48,18 @@ def find_clipped_segments(signals):
 
 def delete_clipped_segments(signals, labels, ROWS_TO_DELETE):
     
+    print('Deleting clipped segments ...')
+
     signals_deleted = np.delete(signals, ROWS_TO_DELETE, axis=0)
     labels_deleted = np.delete(labels, ROWS_TO_DELETE, axis=0)
 
     return signals_deleted, labels_deleted
+
+
+
+
+
+
 
 if __name__ == '__main__':
     
