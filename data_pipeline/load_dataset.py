@@ -13,9 +13,11 @@ from sklearn.model_selection import train_test_split
 
 
 # load data from PAF prediction challenge
-def load_dataset_PAF(DIRECTORY, lowcut, highcut, FREQUENCY_HERTZ, order):
+def load_dataset_PAF(DIRECTORY, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER):
 
-    signals = np.empty((0, 1280, 2))
+    RECORD_DURATION_SECONDS = 1800
+
+    signals = np.empty((0, 10 * FREQUENCY_HERTZ, 2))
     labels = np.empty(0)
 
     for filename in sorted(os.listdir(DIRECTORY)):
@@ -28,12 +30,22 @@ def load_dataset_PAF(DIRECTORY, lowcut, highcut, FREQUENCY_HERTZ, order):
                 filename_without_ext = os.path.splitext(filename)[0]
                 file_directory = DIRECTORY + os.sep + filename_without_ext
 
-                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=1800*128)[0]
-                signals_temp = butter_bandpass_filter(signals_temp, lowcut, highcut, FREQUENCY_HERTZ, order)
-                signals_temp = np.split(signals_temp, indices_or_sections=180)            
+                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=RECORD_DURATION_SECONDS*FREQUENCY_HERTZ)[0]
+                
+                # fix ouliers in the last sample
+                LAST_SAMPLE = 230399
+                signals_temp[LAST_SAMPLE] = signals_temp[LAST_SAMPLE-1]
+                
+                # Butterworth filter on whole 30min signal
+                signals_temp = butter_bandpass_filter(signals_temp, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
+
+                # split records into 10 sec 
+                signals_temp = np.split(signals_temp, indices_or_sections=180)
+                
+                # fill resulting array
                 signals = np.append(signals, signals_temp, axis=0)
 
-                lables_temp = np.full(180, 1)   #label
+                lables_temp = np.full(180, 1)   # TODO make length dependent on length of signals_temp
                 labels = np.append(labels, lables_temp)
 
 
@@ -42,12 +54,22 @@ def load_dataset_PAF(DIRECTORY, lowcut, highcut, FREQUENCY_HERTZ, order):
                 filename_without_ext = os.path.splitext(filename)[0]
                 file_directory = DIRECTORY + os.sep + filename_without_ext
 
-                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=1800*128)[0]
-                signals_temp = butter_bandpass_filter(signals_temp, lowcut, highcut, FREQUENCY_HERTZ, order)
-                signals_temp = np.split(signals_temp, indices_or_sections=180)            
+                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=RECORD_DURATION_SECONDS*FREQUENCY_HERTZ)[0]
+                
+                # fix ouliers in the last sample
+                LAST_SAMPLE = 230399
+                signals_temp[LAST_SAMPLE] = signals_temp[LAST_SAMPLE-1]
+                
+                # Butterworth filter on whole 30min signal
+                signals_temp = butter_bandpass_filter(signals_temp, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
+
+                # split records into 10 sec 
+                signals_temp = np.split(signals_temp, indices_or_sections=180)
+                
+                # fill resulting array
                 signals = np.append(signals, signals_temp, axis=0)
 
-                lables_temp = np.full(180, 0)   # label
+                lables_temp = np.full(180, 0)   # TODO make length dependent on length of signals_temp
                 labels = np.append(labels, lables_temp)
 
 
@@ -62,12 +84,12 @@ def load_dataset_PAF(DIRECTORY, lowcut, highcut, FREQUENCY_HERTZ, order):
 if __name__ == '__main__':
     
     DIRECTORY = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
-    lowcut = 10.0
-    highcut = 60.0
+    LOWCUT = 10.0
+    HIGHCUT = 60.0
     FREQUENCY_HERTZ = 128
-    order = 5
+    ORDER = 5
 
-    signals, labels = load_dataset_PAF(DIRECTORY, lowcut=lowcut, highcut=highcut, FREQUENCY_HERTZ=FREQUENCY_HERTZ, order=order)
+    signals, labels = load_dataset_PAF(DIRECTORY, LOWCUT=LOWCUT, HIGHCUT=HIGHCUT, FREQUENCY_HERTZ=FREQUENCY_HERTZ, ORDER=ORDER)
 
     print(np.shape(signals))
     print(signals[0, :, :])
@@ -118,7 +140,7 @@ if __name__ == '__main__':
     plt.plot(t, x, label='Original signal')
 
 
-    #y = butter_bandpass_filter(x, lowcut, highcut, FREQUENCY_HERTZ, order)
+    #y = butter_bandpass_filter(x, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
     #print(np.shape(y))
     #print(type(y))
 
