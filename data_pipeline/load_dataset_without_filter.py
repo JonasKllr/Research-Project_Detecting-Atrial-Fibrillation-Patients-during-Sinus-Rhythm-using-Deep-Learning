@@ -13,7 +13,10 @@ from sklearn.model_selection import train_test_split
 # load data from PAF prediction challenge
 def load_dataset_PAF(DIRECTORY):
 
-    signals = np.empty((0, 1280, 2))
+    RECORD_DURATION_SECONDS = 1800
+    FREQUENCY_HERTZ = 128
+
+    signals = np.empty((0, 10 * FREQUENCY_HERTZ, 2))
     labels = np.empty(0)
 
     for filename in sorted(os.listdir(DIRECTORY)):
@@ -26,7 +29,7 @@ def load_dataset_PAF(DIRECTORY):
                 filename_without_ext = os.path.splitext(filename)[0]
                 file_directory = DIRECTORY + os.sep + filename_without_ext
 
-                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=1800*128)[0]
+                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=RECORD_DURATION_SECONDS*FREQUENCY_HERTZ)[0]
                 
                 # fix ouliers in the last sample
                 LAST_SAMPLE = 230399
@@ -35,9 +38,7 @@ def load_dataset_PAF(DIRECTORY):
                 # split records into 10 sec 
                 signals_temp = np.split(signals_temp, indices_or_sections=180)
                 
-                # filter out 10 sec segments with signal clipping
-                #signals_temp = clipping_filter(signals_temp)
-
+                # fill resulting array
                 signals = np.append(signals, signals_temp, axis=0)
 
                 lables_temp = np.full(180, 1)   # TODO make length dependent on length of signals_temp
@@ -49,8 +50,8 @@ def load_dataset_PAF(DIRECTORY):
                 filename_without_ext = os.path.splitext(filename)[0]
                 file_directory = DIRECTORY + os.sep + filename_without_ext
 
-                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=1800*128)[0]
-
+                signals_temp = wfdb.rdsamp(file_directory, channels=[0, 1], sampto=RECORD_DURATION_SECONDS*FREQUENCY_HERTZ)[0]
+                
                 # fix ouliers in the last sample
                 LAST_SAMPLE = 230399
                 signals_temp[LAST_SAMPLE] = signals_temp[LAST_SAMPLE-1]
@@ -58,12 +59,10 @@ def load_dataset_PAF(DIRECTORY):
                 # split records into 10 sec 
                 signals_temp = np.split(signals_temp, indices_or_sections=180)
                 
-                # filter out 10 sec segments with signal clipping
-                #signals_temp = clipping_filter(signals_temp)
-
+                # fill resulting array
                 signals = np.append(signals, signals_temp, axis=0)
 
-                lables_temp = np.full(180, 0)   # label
+                lables_temp = np.full(180, 0)   # TODO make length dependent on length of signals_temp
                 labels = np.append(labels, lables_temp)
 
 
