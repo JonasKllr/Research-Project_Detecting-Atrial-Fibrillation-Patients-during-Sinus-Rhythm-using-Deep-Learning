@@ -7,17 +7,20 @@ import wfdb
 from scipy.signal import butter, lfilter
 
 
-def butter_bandpass(lowcut, highcut, FREQUENCY_HERTZ, order):
+def butter_bandpass(LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER):
     nyq = 0.5 * FREQUENCY_HERTZ
-    low = lowcut / nyq
-    high = highcut / nyq
-    b, a = butter(order, [low, high], btype='band')
+    low = LOWCUT / nyq
+    high = HIGHCUT / nyq
+    b, a = butter(ORDER, [low, high], btype='band')
     return b, a
 
 
-def butter_bandpass_filter(data, lowcut, highcut, FREQUENCY_HERTZ, order):
-    b, a = butter_bandpass(lowcut, highcut, FREQUENCY_HERTZ, order=order)
+def butter_bandpass_filter(data, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER):
+    b, a = butter_bandpass(LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER=ORDER)
     return lfilter(b, a, data)
+
+
+
 
 
 # TESTS
@@ -27,9 +30,9 @@ if __name__ == '__main__':
     FREQUENCY_HERTZ = 128.0
 
     # set filter parameters
-    lowcut = 0.3
-    highcut = 50.0
-    order = 5   # value 8 taken from paper (but might be too high for my usecase)
+    LOWCUT = 0.3
+    HIGHCUT = 50.0
+    ORDER = 5   # value 8 taken from paper (but might be too high for my usecase)
 
     #set path 
     ONE_SECOND = 128
@@ -48,7 +51,7 @@ if __name__ == '__main__':
     plt.clf()
     plt.plot(t, x, label='Original signal')
 
-    y = butter_bandpass_filter(x, lowcut, highcut, FREQUENCY_HERTZ, order)
+    y = butter_bandpass_filter(x, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
     print(np.shape(y))
     print(type(y))
 
