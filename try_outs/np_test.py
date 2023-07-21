@@ -1,3 +1,6 @@
+import sys
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -23,10 +26,7 @@ signals, labels = load_dataset_PAF(file_directory)
 
 print(np.shape(signals))
 
-# data normalization into range [-1.0, 1.0]
-#signals[:,:,0] = normalize(signals[:,:,0], norm='max', axis=1)
-#signals[:,:,1] = normalize(signals[:,:,1], norm='max', axis=1)
-#signals[:,:,0] = normalize_ecg(signals[:,:,0])
+# data normalization into range [0.0, 1.0]
 signals = normalize_ecg(signals)
 
 
