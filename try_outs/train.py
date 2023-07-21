@@ -1,3 +1,6 @@
+import sys
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -8,7 +11,7 @@ from scipy.signal import butter, lfilter, freqz
 from sklearn.model_selection import train_test_split
 
 from data_pipeline.filter_butterworth import butter_bandpass_filter, butter_bandpass
-from data_pipeline.load_dataset import load_dataset_PAF
+from data_pipeline.load_dataset_without_filter import load_dataset_PAF
 
 
 # turn off GPU usage
@@ -35,7 +38,13 @@ HIGHCUT = 60.0
 FREQUENCY_HERTZ = 128
 ORDER = 5
 
-signals, labels = load_dataset_PAF(DIRECTORY, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
+#signals, labels = load_dataset_PAF(DIRECTORY, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
+signals, labels = load_dataset_PAF(DIRECTORY)
+
+
+
+
+
 
 
 # split data into train and test sets randomly
@@ -43,28 +52,14 @@ train_data_1, test_data_1, train_data_2, test_data_2, train_labels, test_labels 
     signals[:,:,0], signals[:,:,1], labels, test_size=0.2, random_state=21
     )
 
-# normalize data
-min_val = tf.reduce_min(signals)
-max_val = tf.reduce_max(signals)
-
-#train_data_1 = (train_data_1 - min_val) / (max_val - min_val)
-#train_data_2 = (train_data_2 - min_val) / (max_val - min_val)
-#
-#test_data_1 = (test_data_1 - min_val) / (max_val - min_val)
-#test_data_2 = (test_data_2 - min_val) / (max_val - min_val)
-
 
 # transform it into tesorflow dataset
 train_data = tf.data.Dataset.from_tensor_slices(((train_data_1, train_data_2), train_labels))
 test_data = tf.data.Dataset.from_tensor_slices(((test_data_1, test_data_2), test_labels))
 
 
-BATCH_SIZE = 10
-train_data = train_data.batch(BATCH_SIZE)
+train_data = train_data.batch(1)
 test_data = test_data.batch(1)
-
-
-
 
 # build CNN
 RECORD_LENGTH = 1280
@@ -101,8 +96,9 @@ model.compile(optimizer= tf.keras.optimizers.Adam(learning_rate=0.001),
 print(model.summary())
 
 model.fit(train_data,
+          batch_size = 50,
           epochs = 20,
-          validation_data = test_data
+          validation_data = test_data,
           )
 
 del model
