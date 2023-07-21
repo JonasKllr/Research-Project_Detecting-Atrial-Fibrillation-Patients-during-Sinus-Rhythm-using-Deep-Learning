@@ -29,29 +29,36 @@ x = signals[SEGMENT_NUMBER,:, 0]
 
 
 #plt.figure(2)
-fig, axs = plt.subplots(4)
-#plt.clf()
-axs[0].plot(t, x)
-axs[0].set_title('ECG 0')
+fig, axs = plt.subplots(2)
 
-y = signals[SEGMENT_NUMBER,:, 1]
-
-axs[1].plot(t, y)
-axs[1].set_title('ECG 1')
+#plot original signals
+#axs[0].plot(t, x)
+#axs[0].set_title('ECG 0')
+#
+#y = signals[SEGMENT_NUMBER,:, 1]
+#
+#axs[1].plot(t, y)
+#axs[1].set_title('ECG 1')
 #axs[1].xlabel('time (seconds)')
 #axs[1].grid(True)
 #axs[1].axis('tight')
 #axs[1].legend(loc='upper left')
 
+
+# plot normalized signals
 z = signals_norm[SEGMENT_NUMBER, :, 0]
-
-axs[2].plot(t, z)
-axs[2].set_title('ECG 1')
-
+#
+axs[0].plot(t, z)
+axs[0].set_title('lead 0 normalized', loc='left')
+axs[0].set_xlabel('seconds')
+#
 w = signals_norm[SEGMENT_NUMBER, :, 1]
+#
+axs[1].plot(t, w)
+axs[1].set_title('lead 1 normalized', loc='left')
+axs[1].set_xlabel('seconds')
 
-axs[3].plot(t, w)
-axs[3].set_title('ECG 1')
+#axs.set_xlabel('seconds')
 
 plt.tight_layout()
 plt.show()
