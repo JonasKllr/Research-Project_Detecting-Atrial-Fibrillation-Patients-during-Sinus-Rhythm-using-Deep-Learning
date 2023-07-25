@@ -4,9 +4,12 @@ sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import random
 import tensorflow as tf
 import wfdb
+import wfdb.processing
 
+from scipy.io import loadmat
 from sklearn.model_selection import train_test_split
 
 
@@ -73,99 +76,197 @@ def load_dataset_PAF(DIRECTORY):
 
 
 
+# Get comments from header files under 'Dx'. Labels of the recording.
+def get_header_comments_Dx_CinC(RECORD_DIR):
+    
+    header = wfdb.rdheader(RECORD_DIR)
+    header_comments = header.comments
+    
+    # get entry under 'Dx' and convert into list with one label per element.
+    comment_list = list()
+    for comment in header_comments:
+        if comment.startswith('Dx'):
+            try:
+                entries = comment.split(': ')[1].split(',')
+                for entry in entries:
+                    comment_list.append(entry.strip())
+            except:
+                pass
+    
+    return comment_list
+
+
+# Get comments from header files under 'Age'. Used for labels in training
+def get_header_comments_Age_CinC(RECORD_DIR):
+    
+    header = wfdb.rdheader(RECORD_DIR)
+    header_comments = header.comments
+    
+    # get entry under 'Age' and convert into int.
+    for comment in header_comments:
+        if comment.startswith('Age'):
+            try:
+                age = comment.split(': ')[1]
+                age = int(age)
+                
+            except:
+                pass
+    
+    return age
+
+
+
+# https://github.com/physionetchallenges/python-classifier-2021/blob/main/helper_code.py#L65
+def load_dataset_CinC(DIRECTORY):
+
+    FREQUENCY_HERTZ_TARGET = 128
+    FREQUENCY_HERTZ_ORIGINAL = 500
+
+    signals = np.empty((0, 10 * FREQUENCY_HERTZ_TARGET, 2))
+    labels = np.empty(0)
+
+    # for reproducibility
+    random.seed(42)
+
+    for filename in sorted(os.listdir(DIRECTORY)):
+        
+        # only do data integration once per record
+        if filename.endswith('.mat'):
+            
+            filename_without_ext = os.path.splitext(filename)[0]
+            header_file_dir = DIRECTORY + os.sep + filename_without_ext
+
+            comment_list = get_header_comments_Dx_CinC(header_file_dir)
+            SINUS_RHYTHM = '426783006'
+
+            # load file only if it is labeled as sinus rhythm (426783006)
+            if SINUS_RHYTHM in comment_list:
+
+                # https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html
+                # read in .mat file
+                file_directory_mat = DIRECTORY + os.sep + filename
+                signals_temp = loadmat(file_directory_mat)['val']
+
+                # pick 2 leads out of 12 randomly
+                random_list = random.sample(range(11), 2)
+                signals_temp = signals_temp[random_list]
+                signals_temp = np.asarray(signals_temp)
+                
+                # change axis to realize shape (5000, 2)
+                signals_temp = np.transpose(signals_temp)
+
+                # https://wfdb.readthedocs.io/en/latest/processing.html#basic-utility
+                # resample to 128 Hz
+                signals_temp_resampled = np.zeros((1, 1280,2))
+                signals_temp_resampled[0,:,0] = wfdb.processing.resample_sig(signals_temp[:,0], FREQUENCY_HERTZ_ORIGINAL, FREQUENCY_HERTZ_TARGET)[0]
+                signals_temp_resampled[0,:,1] = wfdb.processing.resample_sig(signals_temp[:,1], FREQUENCY_HERTZ_ORIGINAL, FREQUENCY_HERTZ_TARGET)[0]
+
+                signals = np.append(signals, signals_temp_resampled, axis=0)
+
+                # get age of the patient
+                age = get_header_comments_Age_CinC(header_file_dir)
+
+                if age in range(0,10):
+                    labels = np.append(labels, 0)
+                elif age in range(10,20):
+                    labels = np.append(labels, 1)
+                elif age in range(20,30):
+                    labels = np.append(labels, 2)
+                elif age in range(30,40):
+                    labels = np.append(labels, 3)
+                elif age in range(40,50):
+                    labels = np.append(labels, 4)
+                elif age in range(50,60):
+                    labels = np.append(labels, 5)
+                elif age in range(60,70):
+                    labels = np.append(labels, 6)
+                elif age in range(70,80):
+                    labels = np.append(labels, 7)
+                elif age in range(80,90):
+                    labels = np.append(labels, 8)
+                elif age in range(90,100):
+                    labels = np.append(labels, 9)
+                elif age in range(100,110):
+                    labels = np.append(labels, 10)
+                else:
+                    pass
+
+            else:
+                pass
+
+        else:
+            pass
+    
+    return signals, labels
+
+
+
+
+
+
+
+
 # TESTS
 if __name__ == '__main__':
     
-    DIRECTORY = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
-    lowcut = 10.0
-    highcut = 60.0
-    FREQUENCY_HERTZ = 128
-    order = 5
+    DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/test'
 
-    signals, labels = load_dataset_PAF(DIRECTORY)
 
+    signals, labels = load_dataset_CinC(DIRECTORY)
+    print(signals)
     print(np.shape(signals))
-    print(signals[0, :, :])
+
+    print(labels)
+    print(type(labels))
     print(np.shape(labels))
-    print(labels[0])
 
 
 
-    signals_flat, bins = np.histogram(signals, bins=500)
-    print(signals_flat.min())
-    print(signals_flat.max())
-
-    print(signals.min())
-    print(signals.max())
-    
-
-    plt.bar(bins[:-1], signals_flat, width=np.diff(bins))
-    #plt.ylim(0, 50)
-    plt.show()
-
-
-    train_data_1, test_data_1, train_data_2, test_data_2, train_labels, test_labels = train_test_split(
-        signals[:,:,0], signals[:,:,1], labels, test_size=0.2, random_state=21
-        )
-
-    print(np.shape(train_data_1))
-    print(np.shape(train_data_2))
-    print(np.shape(test_data_1))
-    print(np.shape(test_data_2))
-    print(np.shape(train_labels))
-    print(np.shape(test_labels))
-    print(train_data_2[1,:])
 
 
 
-    # normalize data
-    #min_val = tf.reduce_min(signals)
-    #max_val = tf.reduce_max(signals)
+    # set record parameters
+    RECORD_DURATION_SECONDS = 10
+    FREQUENCY_HERTZ = 128.0
 
-    min_val = signals.min()
-    max_val = signals.max()
-
-    #train_data = (train_data - min_val) / (max_val - min_val)
-    #test_data = (test_data - min_val) / (max_val - min_val)
-
-
-
-    train_data = tf.data.Dataset.from_tensor_slices(((train_data_1, train_data_2), train_labels))
-
-
-    print(train_data.element_spec)
-    print(list(train_data.as_numpy_iterator())[0])
 
     # from here only for plotting the signal
-    RECORD_DURATION_SECONDS = 10
     nsamples = int(RECORD_DURATION_SECONDS * FREQUENCY_HERTZ)
     t = np.linspace(0, RECORD_DURATION_SECONDS, nsamples, endpoint=False)
 
+    #plt.figure(2)
+    fig, axs = plt.subplots(2)
 
-    #x = list(train_data.as_numpy_iterator())[1]
-    x = train_data_1[0, :]
+    # plot normalized signals
+    z = signals[0, :, 0]
+    axs[0].plot(t, z)
+    axs[0].set_title('lead 0 normalized', loc='left')
+    axs[0].set_xlabel('seconds')
     
+    w = signals[0, :, 1]
+    axs[1].plot(t, w)
+    axs[1].set_title('lead 1 normalized', loc='left')
+    axs[1].set_xlabel('seconds')
 
-    plt.figure(2)
-    plt.clf()
-    plt.plot(t, x, label='Original signal')
 
-
-    #y = butter_bandpass_filter(x, lowcut, highcut, FREQUENCY_HERTZ, order)
-    #print(np.shape(y))
-    #print(type(y))
-
-    #plt.plot(t, y, label='Filtered signal')
-    #plt.xlabel('time (seconds)')
-    #plt.grid(True)
-    #plt.axis('tight')
-    #plt.legend(loc='upper left')
-
+    plt.tight_layout()
     plt.show()
 
 
-    BATCH_SIZE = 1
-    train_data = train_data.batch(BATCH_SIZE)
-    #test_data = test_data.batch(1)
 
+
+
+
+
+    # Histogram
+    #signals_flat, bins = np.histogram(signals, bins=500)
+    #print(signals_flat.min())
+    #print(signals_flat.max())
+
+    #print(signals.min())
+    #print(signals.max())
+    
+    #plt.bar(bins[:-1], signals_flat, width=np.diff(bins))
+    #plt.ylim(0, 50)
+    #plt.show()
 
