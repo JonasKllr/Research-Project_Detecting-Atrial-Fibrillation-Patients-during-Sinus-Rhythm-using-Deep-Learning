@@ -102,7 +102,7 @@ def get_header_comments_Age_CinC(RECORD_DIR):
     header = wfdb.rdheader(RECORD_DIR)
     header_comments = header.comments
     
-    # get entry under 'Age' and convert into int.
+    # get entry under 'Age' and convert to int.
     for comment in header_comments:
         if comment.startswith('Age'):
             try:
@@ -119,6 +119,8 @@ def get_header_comments_Age_CinC(RECORD_DIR):
 # https://github.com/physionetchallenges/python-classifier-2021/blob/main/helper_code.py#L65
 def load_dataset_CinC(DIRECTORY):
 
+    print('Loading CinC data set ...')
+
     FREQUENCY_HERTZ_TARGET = 128
     FREQUENCY_HERTZ_ORIGINAL = 500
 
@@ -132,6 +134,8 @@ def load_dataset_CinC(DIRECTORY):
         
         # only do data integration once per record
         if filename.endswith('.mat'):
+
+            print(filename)
             
             filename_without_ext = os.path.splitext(filename)[0]
             header_file_dir = DIRECTORY + os.sep + filename_without_ext
@@ -186,8 +190,6 @@ def load_dataset_CinC(DIRECTORY):
                     labels = np.append(labels, 8)
                 elif age in range(90,100):
                     labels = np.append(labels, 9)
-                elif age in range(100,110):
-                    labels = np.append(labels, 10)
                 else:
                     pass
 
@@ -209,7 +211,8 @@ def load_dataset_CinC(DIRECTORY):
 # TESTS
 if __name__ == '__main__':
     
-    DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/test'
+    #DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/test'
+    DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/everything'
 
 
     signals, labels = load_dataset_CinC(DIRECTORY)
