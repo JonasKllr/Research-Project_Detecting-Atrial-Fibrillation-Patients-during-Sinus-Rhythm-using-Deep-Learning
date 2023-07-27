@@ -10,7 +10,7 @@ import wfdb
 import wfdb.processing
 
 from scipy.io import loadmat
-from sklearn.model_selection import train_test_split
+
 
 
 # load data from PAF prediction challenge
@@ -110,7 +110,8 @@ def get_header_comments_Age_CinC(RECORD_DIR):
                 age = int(age)
                 
             except:
-                pass
+                age = np.nan
+                #pass
     
     return age
 
@@ -137,62 +138,50 @@ def load_dataset_CinC(DIRECTORY):
 
             print(filename)
             
+            # read in .mat file
+            file_dir_mat = DIRECTORY + os.sep + filename
+            signals_temp = loadmat(file_dir_mat)['val']
+
+            # pick 2 leads out of 12 randomly
+            random_list = random.sample(range(11), 2)
+            signals_temp = signals_temp[random_list]
+            signals_temp = np.asarray(signals_temp)
+            
+            # change axis to realize shape (5000, 2)
+            signals_temp = np.transpose(signals_temp)
+
+            # resample to 128 Hz
+            signals_temp_resampled = np.zeros((1, 1280,2))
+            signals_temp_resampled[0,:,0] = wfdb.processing.resample_sig(signals_temp[:,0], FREQUENCY_HERTZ_ORIGINAL, FREQUENCY_HERTZ_TARGET)[0]
+            signals_temp_resampled[0,:,1] = wfdb.processing.resample_sig(signals_temp[:,1], FREQUENCY_HERTZ_ORIGINAL, FREQUENCY_HERTZ_TARGET)[0]
+
+            signals = np.append(signals, signals_temp_resampled, axis=0)
+
+            # get age of the patient
             filename_without_ext = os.path.splitext(filename)[0]
-            header_file_dir = DIRECTORY + os.sep + filename_without_ext
+            file_dir_hea = DIRECTORY + os.sep + filename_without_ext
+            age = get_header_comments_Age_CinC(file_dir_hea)
 
-            comment_list = get_header_comments_Dx_CinC(header_file_dir)
-            SINUS_RHYTHM = '426783006'
-
-            # load file only if it is labeled as sinus rhythm (426783006)
-            if SINUS_RHYTHM in comment_list:
-
-                # https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html
-                # read in .mat file
-                file_directory_mat = DIRECTORY + os.sep + filename
-                signals_temp = loadmat(file_directory_mat)['val']
-
-                # pick 2 leads out of 12 randomly
-                random_list = random.sample(range(11), 2)
-                signals_temp = signals_temp[random_list]
-                signals_temp = np.asarray(signals_temp)
-                
-                # change axis to realize shape (5000, 2)
-                signals_temp = np.transpose(signals_temp)
-
-                # https://wfdb.readthedocs.io/en/latest/processing.html#basic-utility
-                # resample to 128 Hz
-                signals_temp_resampled = np.zeros((1, 1280,2))
-                signals_temp_resampled[0,:,0] = wfdb.processing.resample_sig(signals_temp[:,0], FREQUENCY_HERTZ_ORIGINAL, FREQUENCY_HERTZ_TARGET)[0]
-                signals_temp_resampled[0,:,1] = wfdb.processing.resample_sig(signals_temp[:,1], FREQUENCY_HERTZ_ORIGINAL, FREQUENCY_HERTZ_TARGET)[0]
-
-                signals = np.append(signals, signals_temp_resampled, axis=0)
-
-                # get age of the patient
-                age = get_header_comments_Age_CinC(header_file_dir)
-
-                if age in range(0,10):
-                    labels = np.append(labels, 0)
-                elif age in range(10,20):
-                    labels = np.append(labels, 1)
-                elif age in range(20,30):
-                    labels = np.append(labels, 2)
-                elif age in range(30,40):
-                    labels = np.append(labels, 3)
-                elif age in range(40,50):
-                    labels = np.append(labels, 4)
-                elif age in range(50,60):
-                    labels = np.append(labels, 5)
-                elif age in range(60,70):
-                    labels = np.append(labels, 6)
-                elif age in range(70,80):
-                    labels = np.append(labels, 7)
-                elif age in range(80,90):
-                    labels = np.append(labels, 8)
-                elif age in range(90,100):
-                    labels = np.append(labels, 9)
-                else:
-                    pass
-
+            if age in range(0,10):
+                labels = np.append(labels, 0)
+            elif age in range(10,20):
+                labels = np.append(labels, 1)
+            elif age in range(20,30):
+                labels = np.append(labels, 2)
+            elif age in range(30,40):
+                labels = np.append(labels, 3)
+            elif age in range(40,50):
+                labels = np.append(labels, 4)
+            elif age in range(50,60):
+                labels = np.append(labels, 5)
+            elif age in range(60,70):
+                labels = np.append(labels, 6)
+            elif age in range(70,80):
+                labels = np.append(labels, 7)
+            elif age in range(80,90):
+                labels = np.append(labels, 8)
+            elif age in range(90,100):
+                labels = np.append(labels, 9)
             else:
                 pass
 
@@ -212,7 +201,7 @@ def load_dataset_CinC(DIRECTORY):
 if __name__ == '__main__':
     
     #DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/test'
-    DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/everything'
+    DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/sinus_and_age-not-300_only'
 
 
     signals, labels = load_dataset_CinC(DIRECTORY)
