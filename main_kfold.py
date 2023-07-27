@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 from datetime import datetime
-from sklearn.model_selection import KFold, train_test_split
+from sklearn.model_selection import KFold
 
 import my_model
 from data_pipeline.load_dataset_without_filter import load_dataset_PAF
@@ -12,6 +12,7 @@ from data_pipeline.filter_butterworth import butter_bandpass_filter
 from data_pipeline.filter_clipped_segments import find_clipped_segments, delete_clipped_segments
 from data_pipeline.normalize import normalize_ecg
 
+# force tensorflow to use CPU (for my laptop)
 tf.config.set_visible_devices([], 'GPU')
 
 # load data
@@ -52,6 +53,7 @@ kfold = KFold(n_splits=5, shuffle=True, random_state=21)
 fold_number = 1
 for train_index, test_index in kfold.split(signals):
     
+    # split data into folds
     train_data_1 = signals[train_index,:,0]
     train_data_2 = signals[train_index,:,1]
     train_labels = labels[train_index]
@@ -64,22 +66,16 @@ for train_index, test_index in kfold.split(signals):
     train_data = tf.data.Dataset.from_tensor_slices(((train_data_1, train_data_2), train_labels))
     test_data = tf.data.Dataset.from_tensor_slices(((test_data_1, test_data_2), test_labels))
 
-
-
-    #for element in train_data.as_numpy_iterator():
-    #    print(element)
-    #    break
-
-    #print(tf.data.experimental.cardinality(train_data))
-
-
+    # shuffle the data
     train_data = train_data.shuffle(buffer_size=train_data.cardinality())
     test_data = test_data.shuffle(buffer_size=test_data.cardinality())
-
+    
+    # batch the data
     train_data = train_data.batch(32)
     test_data = test_data.batch(100)
-
-    model = my_model.build_model_without_tuner_4()
+    
+    # chose model to train
+    model = my_model.build_model_without_tuner_5()
     print(model.summary())
 
     # Generate a print
@@ -87,21 +83,23 @@ for train_index, test_index in kfold.split(signals):
     print(f'Training for fold {fold_number} ...')
 
     # Tensorboard callback
-    log_dir = r'/media/jonas/SSD_new/CMS/Semester_4/research_project/tensorboard/' + datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/' + model.name + '/tensorboard/fold_num_' + str(fold_number) +'/'
+    os.makedirs(log_dir)
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=2)
 
     #Early Stopping
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=8, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=False)
 
     history = model.fit(train_data,
-            epochs = 10,
+            epochs = 30,
+            verbose=2,
             validation_data = test_data,
             callbacks=[tensorboard_callback, early_stopping]
             )
 
     # save history plots
-    HISTORY_DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/' + datetime.now().strftime("%Y%m%d-%H%M%S") +'/'
-    os.mkdir(HISTORY_DIR)
+    HISTORY_DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/' + model.name + '/plots/fold_num_' + str(fold_number) +'/'
+    os.makedirs(HISTORY_DIR)
 
     # Get the training accuracy and validation accuracy
     training_accuracy = history.history['binary_accuracy']
