@@ -65,14 +65,14 @@ early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5
 # Custom training loop for multiple tries with different data splits
 for _ in range(max_trials):
     # Get the next hyperparameter configuration from the tuner
-    hyperparameters = tuner.get_state()
+    hyperparameters = tuner.trail.hyperparameters
 
     # Build the model with the current hyperparameters
-    model = tuner.hypermodel.build(hyperparameters.values)
+    model = tuner.hypermodel.build(hyperparameters)
 
     # Create multiple data splits and train the model on each split
     for _ in range(tuner.executions_per_trial):
-
+        
         # split data into train and test sets randomly
         train_data_1, test_data_1, train_data_2, test_data_2, train_labels, test_labels = train_test_split(
         signals[:,:,0], signals[:,:,1], labels, test_size=0.2, random_state=None
