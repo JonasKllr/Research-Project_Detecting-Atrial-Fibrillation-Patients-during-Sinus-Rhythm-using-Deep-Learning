@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -82,10 +83,14 @@ for train_index, test_index in kfold.split(signals):
     print('------------------------------------------------------------------------')
     print(f'Training for fold {fold_number} ...')
 
+    # creating directory for logging
+    logging.basicConfig(filename='training.log', level=logging.INFO)
+    LOG_DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/' + model.name
+    
     # Tensorboard callback
-    log_dir = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/' + model.name + '/tensorboard/fold_num_' + str(fold_number) +'/'
-    os.makedirs(log_dir)
-    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=2)
+    TB_DIR = LOG_DIR + '/tensorboard/fold_num_' + str(fold_number) +'/'
+    os.makedirs(TB_DIR)
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=TB_DIR, histogram_freq=2)
 
     #Early Stopping
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=False)
@@ -98,7 +103,7 @@ for train_index, test_index in kfold.split(signals):
             )
 
     # save history plots
-    HISTORY_DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/' + model.name + '/plots/fold_num_' + str(fold_number) +'/'
+    HISTORY_DIR = LOG_DIR + '/plots/fold_num_' + str(fold_number) +'/'
     os.makedirs(HISTORY_DIR)
 
     # Get the training accuracy and validation accuracy
