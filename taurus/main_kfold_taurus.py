@@ -46,7 +46,7 @@ signals = normalize_ecg(signals)
 LEARNING_RATE = [1e-2, 1e-3, 1e-4]
 KERNEL_SIZE = [3, 6, 9, 12]
 POOLING_LAYER = ['max_pool', 'avg_pool']
-MODEL_ARCHITECTURE = ['Model_2', 'Model_3', 'Model_4', 'Model_5']
+MODEL_ARCHITECTURE = ['Model_1', 'Model_2', 'Model_3', 'Model_4']
 
 
 
