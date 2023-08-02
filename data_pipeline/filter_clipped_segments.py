@@ -31,7 +31,7 @@ def find_clipped_segments(signals):
     print('Searching for clipped segments ...')
 
     # content of window to be searched for
-    WINDOW_SIZE = 8
+    WINDOW_SIZE = 7
     clipping_window_0 = np.full((WINDOW_SIZE,), 0.0)
     clipping_window_1 = np.full((WINDOW_SIZE,), 1.0)
     
