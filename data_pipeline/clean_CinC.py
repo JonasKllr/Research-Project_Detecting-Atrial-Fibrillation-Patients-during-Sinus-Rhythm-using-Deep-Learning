@@ -97,7 +97,7 @@ def find_age_300():
 
 
 
-    np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/age_300.txt', age_300)
+    #np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/age_300.txt', age_300)
 
     print(age)
     print(np.shape(age))
@@ -183,10 +183,12 @@ if __name__ == '__main__':
 
     age = np.loadtxt(array_file)
 
-    plt.hist(age, bins=5)
-    plt.title('Age grouped in 50 categories')
-    plt.xlabel('Age')
-    plt.ylabel('Frequency')
+    print(age.max())
+
+    plt.hist(age, bins=5 ,density=False)
+    plt.title('Age grouped in 5 categories')
+    plt.xlabel('Age [years]')
+    plt.ylabel('Frequency [-]')
     plt.show()
 
 
