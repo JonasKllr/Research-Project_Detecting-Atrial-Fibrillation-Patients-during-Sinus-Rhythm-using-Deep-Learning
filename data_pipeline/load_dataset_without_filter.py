@@ -212,6 +212,10 @@ if __name__ == '__main__':
     print(type(labels))
     print(np.shape(labels))
 
+    SAVE_DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/'
+    #np.save(SAVE_DIR + 'CinC.npy', signals, allow_pickle=False)
+    #np.save(SAVE_DIR + 'CinC_age.npy', labels, allow_pickle=False)
+
 
 
 
