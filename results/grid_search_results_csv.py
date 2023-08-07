@@ -124,6 +124,7 @@ if __name__ == '__main__':
     x_label_list = ['KS 3 - PL avg', 'KS 3 - PL max', 'KS 6 - PL avg', 'KS 6 - PL max', 'KS 9 - PL avg', 'KS 9 - PL max', 'KS 12 - PL avg', 'KS 12 - PL max']
     y_label_list = ['Model 1 - LR 0.0001', 'Model 1 - LR 0.001', 'Model 1 - LR 0.01', 'Model 2 - LR 0.0001', 'Model 2 - LR 0.001', 'Model 2 - LR 0.01', 'Model 3 - LR 0.0001', 'Model 3 - LR 0.001', 'Model 3 - LR 0.01', 'Model 4 - LR 0.0001', 'Model 4 - LR 0.001', 'Model 4 - LR 0.01']
 
+
     fig, ax = plt.subplots()
     sns.heatmap(mean_results.pivot_table(
         values='val_binary_accuracy',
@@ -147,31 +148,43 @@ if __name__ == '__main__':
     ax.set_title('Median Accuracy', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
-
     plt.tight_layout()
 
-    plt.show()
 
-
-    plt.figure()
-    plt.title('mean_acc')
+    fig, ax = plt.subplots()
     sns.heatmap(mean_results.pivot_table(
-        values='val_binary_accuracy',
+        values='mean_f1-score',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='Blues', cbar=0, linewidths=0.5)
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+
+    ax.set_title('Mean f1-Score', weight='bold')
+    ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
+    ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
     plt.tight_layout()
+
+
+    fig, ax = plt.subplots()
+    sns.heatmap(mean_results.pivot_table(
+        values='median_f1-score',
+        index=['model', 'learning_rate'],
+        columns=['kernel_size', 'pooling_layer']
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+
+    ax.set_title('Median f1-Score', weight='bold')
+    ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
+    ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    plt.tight_layout()
+
 
     plt.show()
 
-    plt.figure()
-    plt.title('median_acc')
-    sns.heatmap(median_results.pivot_table(
-        values='val_binary_accuracy',
-        index=['model', 'learning_rate'],
-        columns=['kernel_size', 'pooling_layer']
-    ), annot=True)
-    plt.tight_layout()
+
+
+
+  
+
+
 
     plt.figure()
     plt.title('mean_f1-score')
@@ -191,23 +204,6 @@ if __name__ == '__main__':
     ), annot=True)
     plt.tight_layout()
 
-    #plt.figure()
-    #plt.title('mean_loss')
-    #sns.heatmap(mean_results.pivot_table(
-    #    values='val_loss',
-    #    index=['model', 'learning_rate'],
-    #    columns=['kernel_size', 'pooling_layer']
-    #), annot=True)
-    #plt.tight_layout()
-
-    #plt.figure()
-    #plt.title('median_loss')
-    #sns.heatmap(median_results.pivot_table(
-    #    values='val_loss',
-    #    index=['model', 'learning_rate'],
-    #    columns=['kernel_size', 'pooling_layer']
-    #), annot=True)
-    #plt.tight_layout()
     
     
     plt.show()
