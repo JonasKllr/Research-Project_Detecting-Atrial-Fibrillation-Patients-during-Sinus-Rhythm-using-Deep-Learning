@@ -186,35 +186,6 @@ if __name__ == '__main__':
 
 
 
-    plt.figure()
-    plt.title('mean_f1-score')
-    sns.heatmap(mean_results.pivot_table(
-        values='val_f1_score',
-        index=['model', 'learning_rate'],
-        columns=['kernel_size', 'pooling_layer']
-    ), annot=True)
-    plt.tight_layout()
-
-    plt.figure()
-    plt.title('median_f1-score')
-    sns.heatmap(median_results.pivot_table(
-        values='val_f1_score',
-        index=['model', 'learning_rate'],
-        columns=['kernel_size', 'pooling_layer']
-    ), annot=True)
-    plt.tight_layout()
-
-    
-    
-    plt.show()
-
-
-
-
-
-
-
-
             
 
 
