@@ -5,11 +5,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import random
-import tensorflow as tf
+import re
 import wfdb
 import wfdb.processing
 
 from scipy.io import loadmat
+
+
+def get_patient_number(filename):
+    
+    regex = re.compile(r'\d+')
+    patient_number = [int(x) for x in regex.findall(filename)][0]
+    
+    return patient_number
+
+
+    
 
 
 
@@ -199,6 +210,12 @@ def load_dataset_CinC(DIRECTORY):
 
 # TESTS
 if __name__ == '__main__':
+
+    filename = 'n11.dat'
+    get_patient_number(filename)
+
+
+
     
     #DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/test'
     DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/sinus_and_age-not-300_only'
