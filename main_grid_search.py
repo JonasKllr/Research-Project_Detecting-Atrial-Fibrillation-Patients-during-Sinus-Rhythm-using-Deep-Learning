@@ -17,7 +17,7 @@ tf.config.set_visible_devices([], 'GPU')
 
 # load data
 FILE_DIRECTORY = "/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/"
-signals, labels = load_dataset_PAF(FILE_DIRECTORY)
+signals, labels, patient_number_array = load_dataset_PAF(FILE_DIRECTORY)
 
 # data normalization into range [0.0, 1.0] to filter for signal clipping
 signals_norm = normalize_ecg(signals)
@@ -27,9 +27,14 @@ clipped_segments = find_clipped_segments(signals_norm)
 del signals_norm
 
 # delete the segments containing signal clipping
-signals, labels = delete_clipped_segments(signals, labels, clipped_segments)
+signals, labels, patient_number_array = delete_clipped_segments(signals, labels, patient_number_array, clipped_segments)
+patient_number_array_unique = np.unique(patient_number_array, return_index=False)
+
 print(np.shape(signals))
 print(np.shape(labels))
+print(np.shape(patient_number_array))
+print(np.shape(patient_number_array_unique))
+
 
 # Butterworth filter
 LOWCUT = 0.3
@@ -62,7 +67,10 @@ for model_choice in MODEL_ARCHITECTURE:
             for learning_rate_choice in LEARNING_RATE:
 
                 fold_number = 1
-                for train_index, test_index in kfold.split(signals):
+                for train_index, test_index in kfold.split(patient_number_array_unique):
+                    
+                    signal_train_index = 
+
 
                     # split data into folds
                     train_data_1 = signals[train_index,:,0]
