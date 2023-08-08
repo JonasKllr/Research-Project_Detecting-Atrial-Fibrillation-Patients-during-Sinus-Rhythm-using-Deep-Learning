@@ -69,17 +69,21 @@ for model_choice in MODEL_ARCHITECTURE:
                 fold_number = 1
                 for train_index, test_index in kfold.split(patient_number_array_unique):
                     
-                    signal_train_index = 
-
+                    # train test split according to patients
+                    train_split_patient = patient_number_array_unique[train_index]
+                    test_split_patient = patient_number_array_unique[test_index]
+                    
+                    train_signal_index = np.where(np.in1d(patient_number_array, train_split_patient))[0]
+                    test_signal_index = np.where(np.in1d(patient_number_array, test_split_patient))[0]
 
                     # split data into folds
-                    train_data_1 = signals[train_index,:,0]
-                    train_data_2 = signals[train_index,:,1]
-                    train_labels = labels[train_index]
+                    train_data_1 = signals[train_signal_index,:,0]
+                    train_data_2 = signals[train_signal_index,:,1]
+                    train_labels = labels[train_signal_index]
 
-                    test_data_1 = signals[test_index,:,0]
-                    test_data_2 = signals[test_index,:,1]
-                    test_labels = labels[test_index]
+                    test_data_1 = signals[test_signal_index,:,0]
+                    test_data_2 = signals[test_signal_index,:,1]
+                    test_labels = labels[test_signal_index]
 
                     # transform it into tesorflow dataset
                     train_data = tf.data.Dataset.from_tensor_slices(((train_data_1, train_data_2), train_labels))
