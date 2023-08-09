@@ -3,7 +3,6 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import os
 
-from datetime import datetime
 from sklearn.model_selection import KFold
 
 import my_model
@@ -56,7 +55,7 @@ kfold = KFold(n_splits=5, shuffle=True, random_state=21)
 
 
 # Hyperparameters
-MODEL_ARCHITECTURE = ['Model_1', 'Model_2', 'Model_3', 'Model_4']
+MODEL_ARCHITECTURE = ['Model_4']
 KERNEL_SIZE = [3, 6, 9, 12]
 POOLING_LAYER = ['max_pool', 'avg_pool']
 LEARNING_RATE = [1e-2, 1e-3, 1e-4]
@@ -115,7 +114,7 @@ for model_choice in MODEL_ARCHITECTURE:
                     print(f'Training for fold {fold_number} ...')
 
                     # creating directory for logging
-                    LOG_DIR = (f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/grid_search/' 
+                    LOG_DIR = (f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/test/' 
                                + model.name + os.path.sep
                                + f'kernel_{kernel_choice}' + os.path.sep
                                + f'pooling_' + pooling_choice + os.path.sep
@@ -130,16 +129,16 @@ for model_choice in MODEL_ARCHITECTURE:
                     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=TB_DIR, histogram_freq=2)
 
                     #Early Stopping
-                    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=False)
+                    #early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=False)
 
                     # logging callback
                     log_callback = tf.keras.callbacks.CSVLogger(LOG_DIR + '/history.csv')
 
                     history = model.fit(train_data,
-                            epochs = 8,
-                            verbose=2,
+                            epochs = 20,
+                            verbose= 1,
                             validation_data = test_data,
-                            callbacks=[early_stopping, log_callback]
+                            callbacks= log_callback
                             )
 
                     # save history plots
