@@ -76,7 +76,7 @@ for train_index, test_index in kfold.split(signals):
     test_data = test_data.batch(100)
     
     # chose model to train
-    model = my_model.build_model_without_tuner_5()
+    model = my_model.build_model_without_tuner_4()
     print(model.summary())
 
     # Generate a print
