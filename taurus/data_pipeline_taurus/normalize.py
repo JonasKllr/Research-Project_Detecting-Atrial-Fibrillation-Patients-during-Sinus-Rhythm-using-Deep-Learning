@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/home/joke793c/research_project/scripts")
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
 
 import numpy as np
 

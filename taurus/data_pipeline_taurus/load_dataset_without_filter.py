@@ -1,15 +1,40 @@
 import sys
-sys.path.append("/home/joke793c/research_project/scripts")
+sys.path.append("/media/jonas/SSD_new/CMS/Semester_4/research_project/scripts")
 
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import random
+import re
 import wfdb
 import wfdb.processing
 
 from scipy.io import loadmat
 
+
+def get_patient_number(filename):
+    
+    # get number in file
+    regex = re.compile(r'\d+')
+    number_in_file = [int(x) for x in regex.findall(filename)][0]
+
+    # assign same number to pair of adjacent files
+    # files starting with 'n' 
+    if filename.startswith('n'):
+        if (number_in_file % 2) == 0:
+            patient_number = number_in_file / 2
+        else:
+            patient_number = (number_in_file + 1) / 2
+    
+    # files starting with 'p'
+    else:
+        if (number_in_file % 2) == 0:
+            patient_number = (number_in_file + 50) / 2
+        else:
+            patient_number = (number_in_file + 50 + 1) / 2
+
+    
+    return int(patient_number)
 
 
 # load data from PAF prediction challenge
@@ -20,6 +45,7 @@ def load_dataset_PAF(DIRECTORY):
 
     signals = np.empty((0, 10 * FREQUENCY_HERTZ, 2))
     labels = np.empty(0)
+    patient_number_array= np.empty(0, dtype=np.int32)
 
     for filename in sorted(os.listdir(DIRECTORY)):
         
@@ -43,7 +69,12 @@ def load_dataset_PAF(DIRECTORY):
                 # fill resulting array
                 signals = np.append(signals, signals_temp, axis=0)
 
-                lables_temp = np.full(180, 1)   # TODO make length dependent on length of signals_temp
+                # assign patient number to 10 sec segments
+                patient_number = get_patient_number(filename)
+                patient_number_array_temp = np.full(180, patient_number, dtype=np.int32)
+                patient_number_array = np.append(patient_number_array, patient_number_array_temp)
+
+                lables_temp = np.full(180, 1)
                 labels = np.append(labels, lables_temp)
 
 
@@ -64,14 +95,19 @@ def load_dataset_PAF(DIRECTORY):
                 # fill resulting array
                 signals = np.append(signals, signals_temp, axis=0)
 
-                lables_temp = np.full(180, 0)   # TODO make length dependent on length of signals_temp
+                # assign patient number to 10 sec segments
+                patient_number = get_patient_number(filename)
+                patient_number_array_temp = np.full(180, patient_number, dtype=np.int32)
+                patient_number_array = np.append(patient_number_array, patient_number_array_temp)
+
+                lables_temp = np.full(180, 0)
                 labels = np.append(labels, lables_temp)
 
 
             else:
                 pass
 
-    return signals, labels
+    return signals, labels, patient_number_array
 
 
 
@@ -198,6 +234,19 @@ def load_dataset_CinC(DIRECTORY):
 
 # TESTS
 if __name__ == '__main__':
+
+    filename = 'p50.dat'
+    print(get_patient_number(filename))
+
+    dir = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/physionet.org/files/afpdb/cleaned/'
+
+    signals, labels, patient_number_array = load_dataset_PAF(dir)
+
+    print(patient_number_array)
+    print(np.shape(patient_number_array))
+
+
+
     
     #DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/test'
     DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/sinus_and_age-not-300_only'
@@ -210,6 +259,10 @@ if __name__ == '__main__':
     print(labels)
     print(type(labels))
     print(np.shape(labels))
+
+    SAVE_DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/'
+    #np.save(SAVE_DIR + 'CinC.npy', signals, allow_pickle=False)
+    #np.save(SAVE_DIR + 'CinC_age.npy', labels, allow_pickle=False)
 
 
 

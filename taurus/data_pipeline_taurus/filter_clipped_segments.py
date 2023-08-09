@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -15,6 +16,9 @@ def clipping_filter_normalized_signal(signals, labels):
     rows_to_delete_0 = np.where((np.all(np.equal(abs(window_view), clipping_window_0), axis=3)))[0]
     rows_to_delete_1 = np.where((np.all(np.equal(abs(window_view), clipping_window_1), axis=3)))[0]
     rows_to_delete = np.concatenate([rows_to_delete_0, rows_to_delete_1])
+
+    # save rows_to_delete to file
+    #np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/deleted_segments/np_arrays/deleted_rows_with_clippting_window6_with_filter.txt', rows_to_delete, fmt='%.1f')
     
     signals_deleted = np.delete(signals, rows_to_delete, axis=0)
     labels_deleted = np.delete(labels, rows_to_delete, axis=0)
@@ -27,7 +31,7 @@ def find_clipped_segments(signals):
     print('Searching for clipped segments ...')
 
     # content of window to be searched for
-    WINDOW_SIZE = 8
+    WINDOW_SIZE = 7
     clipping_window_0 = np.full((WINDOW_SIZE,), 0.0)
     clipping_window_1 = np.full((WINDOW_SIZE,), 1.0)
     
@@ -39,14 +43,15 @@ def find_clipped_segments(signals):
     return np.concatenate([rows_to_delete_0, rows_to_delete_1])
 
 
-def delete_clipped_segments(signals, labels, ROWS_TO_DELETE):
+def delete_clipped_segments(signals, labels, patient_number_array, ROWS_TO_DELETE):
     
     print('Deleting clipped segments ...')
 
     signals_deleted = np.delete(signals, ROWS_TO_DELETE, axis=0)
     labels_deleted = np.delete(labels, ROWS_TO_DELETE, axis=0)
+    patient_number_array_deleted = np.delete(patient_number_array, ROWS_TO_DELETE, axis=0)
 
-    return signals_deleted, labels_deleted
+    return signals_deleted, labels_deleted, patient_number_array_deleted
 
 
 

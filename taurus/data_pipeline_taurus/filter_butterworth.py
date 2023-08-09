@@ -1,5 +1,7 @@
 # code for filter taken from https://scipy-cookbook.readthedocs.io/items/ButterworthBandpass.html
+import matplotlib.pyplot as plt
 import numpy as np
+import os
 import wfdb
 
 from scipy.signal import butter, lfilter
