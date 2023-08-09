@@ -3,7 +3,6 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import os
 
-from datetime import datetime
 from sklearn.model_selection import KFold
 
 import my_model_taurus
@@ -13,7 +12,7 @@ from data_pipeline_taurus.filter_clipped_segments import find_clipped_segments, 
 from data_pipeline_taurus.normalize import normalize_ecg
 
 # force tensorflow to use CPU (for my laptop)
-tf.config.set_visible_devices([], 'GPU')
+#tf.config.set_visible_devices([], 'GPU')
 
 # load data
 FILE_DIRECTORY = "/beegfs/ws/0/joke793c-research_project/data_sets/paf/paf_pred_chall/cleaned"
@@ -51,8 +50,8 @@ kfold = KFold(n_splits=5, shuffle=True, random_state=21)
 
 
 # Hyperparameters
-MODEL_ARCHITECTURE = ['Model_1', 'Model_2', 'Model_3', 'Model_4']
-KERNEL_SIZE = [3, 6, 9, 12]
+MODEL_ARCHITECTURE = ['Model_1']
+KERNEL_SIZE = [12]
 POOLING_LAYER = ['max_pool', 'avg_pool']
 LEARNING_RATE = [1e-2, 1e-3, 1e-4]
 

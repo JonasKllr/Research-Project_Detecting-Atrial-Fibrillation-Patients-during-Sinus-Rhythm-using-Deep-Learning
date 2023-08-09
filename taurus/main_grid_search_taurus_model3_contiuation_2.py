@@ -51,10 +51,10 @@ kfold = KFold(n_splits=5, shuffle=True, random_state=21)
 
 
 # Hyperparameters
-MODEL_ARCHITECTURE = ['Model_1', 'Model_2', 'Model_3', 'Model_4']
-KERNEL_SIZE = [3, 6, 9, 12]
-POOLING_LAYER = ['max_pool', 'avg_pool']
-LEARNING_RATE = [1e-2, 1e-3, 1e-4]
+MODEL_ARCHITECTURE = ['Model_3']
+KERNEL_SIZE = [9]
+POOLING_LAYER = ['avg_pool']
+LEARNING_RATE = [1e-4]
 
 for model_choice in MODEL_ARCHITECTURE:
     for kernel_choice in KERNEL_SIZE:

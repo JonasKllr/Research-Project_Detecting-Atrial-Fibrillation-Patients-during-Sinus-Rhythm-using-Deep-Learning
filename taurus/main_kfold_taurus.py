@@ -43,13 +43,10 @@ signals = normalize_ecg(signals)
 
 
 # Hyperparameters
-LEARNING_RATE = [1e-2, 1e-3, 1e-4]
-KERNEL_SIZE = [3, 6, 9, 12]
-POOLING_LAYER = ['max_pool', 'avg_pool']
-MODEL_ARCHITECTURE = ['Model_1', 'Model_2', 'Model_3', 'Model_4']
-
-
-
+MODEL_ARCHITECTURE = ['Model_3']
+KERNEL_SIZE = [12]
+POOLING_LAYER = ['avg_pool']
+LEARNING_RATE = [1e-4]
 
 
 # k-fold cross validation split
