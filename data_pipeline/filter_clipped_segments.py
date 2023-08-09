@@ -43,14 +43,15 @@ def find_clipped_segments(signals):
     return np.concatenate([rows_to_delete_0, rows_to_delete_1])
 
 
-def delete_clipped_segments(signals, labels, ROWS_TO_DELETE):
+def delete_clipped_segments(signals, labels, patient_number_array, ROWS_TO_DELETE):
     
     print('Deleting clipped segments ...')
 
     signals_deleted = np.delete(signals, ROWS_TO_DELETE, axis=0)
     labels_deleted = np.delete(labels, ROWS_TO_DELETE, axis=0)
+    patient_number_array_deleted = np.delete(patient_number_array, ROWS_TO_DELETE, axis=0)
 
-    return signals_deleted, labels_deleted
+    return signals_deleted, labels_deleted, patient_number_array_deleted
 
 
 

@@ -176,12 +176,13 @@ def get_age_distribution(DIRECTORY):
 
 if __name__ == '__main__':
 
-    dir = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared'
-    #get_age_distribution(dir)
+    dir = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/'
 
-    array_file = dir + '/age_array.txt'
-
+    array_file = dir + 'age_array.txt'
     age = np.loadtxt(array_file)
+
+    labels = np.load(dir + 'CinC_labels_5.npy', allow_pickle=False)
+    labels = labels.astype(int)
 
     print(age.max())
 

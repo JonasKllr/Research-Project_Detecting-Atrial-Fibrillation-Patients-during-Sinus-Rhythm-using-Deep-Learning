@@ -10,7 +10,7 @@ def raw_results_into_dataframe(DIR):
     best_values = [['model', 'kernel_size', 'pooling_layer', 'learning_rate', 'fold', 'epoch', 'binary_accuracy', 'f1_score', 'loss', 'val_binary_accuracy', 'val_f1_score', 'val_loss']]
     
     # get information from file path and history.csv
-    for subdir, dir, files in os.walk(DIR + 'history_ibmt/'): # history_taurus/history/
+    for subdir, dir, files in os.walk(DIR + 'history_ibmt/'): # history_taurus/history/, history_ibmt/
         for file in files:
             
             if file.endswith('history_cleaned.csv'):
@@ -153,7 +153,7 @@ if __name__ == '__main__':
 
     fig, ax = plt.subplots()
     sns.heatmap(mean_results.pivot_table(
-        values='mean_f1-score',
+        values='val_f1_score',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
     ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
@@ -165,8 +165,8 @@ if __name__ == '__main__':
 
 
     fig, ax = plt.subplots()
-    sns.heatmap(mean_results.pivot_table(
-        values='median_f1-score',
+    sns.heatmap(median_results.pivot_table(
+        values='val_f1_score',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
     ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
