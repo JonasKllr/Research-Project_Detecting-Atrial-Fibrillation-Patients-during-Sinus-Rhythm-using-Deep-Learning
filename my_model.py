@@ -341,8 +341,6 @@ def build_model_age_regression(LEARNING_RATE, KERNEL_SIZE, POOLING_LAYER):
     # path 1
     x_1 = tf.keras.layers.Conv1D(filters=10, kernel_size=KERNEL_SIZE, strides=1, padding='same', activation='relu')(input_layer_1)
     x_1 = tf.keras.layers.BatchNormalization()(x_1)
-    x_1 = tf.keras.layers.Conv1D(filters=20, kernel_size=KERNEL_SIZE, strides=1, padding='same', activation='relu')(x_1)
-    x_1 = tf.keras.layers.BatchNormalization()(x_1)
     if POOLING_LAYER == 'max_pool':
        x_1 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='same')(x_1)
     elif POOLING_LAYER == 'avg_pool':
@@ -351,7 +349,13 @@ def build_model_age_regression(LEARNING_RATE, KERNEL_SIZE, POOLING_LAYER):
 
     x_1 = tf.keras.layers.Conv1D(filters=20, kernel_size=5, strides=1, padding='same', activation='relu')(x_1)
     x_1 = tf.keras.layers.BatchNormalization()(x_1)
-    x_1 = tf.keras.layers.Conv1D(filters=20, kernel_size=5, strides=1, padding='same', activation='relu')(x_1)
+    if POOLING_LAYER == 'max_pool':
+       x_1 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='same')(x_1)
+    elif POOLING_LAYER == 'avg_pool':
+       x_1 = tf.keras.layers.AveragePooling1D(pool_size=2, strides=2, padding='same')(x_1)
+    x_1 = tf.keras.layers.Dropout(0.25)(x_1)
+
+    x_1 = tf.keras.layers.Conv1D(filters=40, kernel_size=5, strides=2, padding='same', activation='relu')(x_1)
     x_1 = tf.keras.layers.BatchNormalization()(x_1)
     if POOLING_LAYER == 'max_pool':
        x_1 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='same')(x_1)
@@ -360,14 +364,12 @@ def build_model_age_regression(LEARNING_RATE, KERNEL_SIZE, POOLING_LAYER):
     x_1 = tf.keras.layers.Dropout(0.25)(x_1)
 
     x_1 = tf.keras.layers.GlobalAveragePooling1D()(x_1)
-    x_1 = tf.keras.layers.Dense(20, activation='relu')(x_1)
+    x_1 = tf.keras.layers.Dense(40, activation='relu')(x_1)
     x_1 = tf.keras.layers.Dense(1, activation='relu')(x_1)
 
 
     # path 2
     x_2 = tf.keras.layers.Conv1D(filters=10, kernel_size=KERNEL_SIZE, strides=1, padding='same', activation='relu')(input_layer_2)
-    x_2 = tf.keras.layers.BatchNormalization()(x_2)
-    x_2 = tf.keras.layers.Conv1D(filters=20, kernel_size=KERNEL_SIZE, strides=1, padding='same', activation='relu')(x_2)
     x_2 = tf.keras.layers.BatchNormalization()(x_2)
     if POOLING_LAYER == 'max_pool':
        x_2 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='same')(x_2)
@@ -377,7 +379,13 @@ def build_model_age_regression(LEARNING_RATE, KERNEL_SIZE, POOLING_LAYER):
 
     x_2 = tf.keras.layers.Conv1D(filters=20, kernel_size=5, strides=1, padding='same', activation='relu')(x_2)
     x_2 = tf.keras.layers.BatchNormalization()(x_2)
-    x_2 = tf.keras.layers.Conv1D(filters=20, kernel_size=5, strides=1, padding='same', activation='relu')(x_2)
+    if POOLING_LAYER == 'max_pool':
+       x_2 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='same')(x_2)
+    elif POOLING_LAYER == 'avg_pool':
+       x_2 = tf.keras.layers.AveragePooling1D(pool_size=2, strides=2, padding='same')(x_2)
+    x_2 = tf.keras.layers.Dropout(0.25)(x_2)
+
+    x_2 = tf.keras.layers.Conv1D(filters=40, kernel_size=5, strides=2, padding='same', activation='relu')(x_2)
     x_2 = tf.keras.layers.BatchNormalization()(x_2)
     if POOLING_LAYER == 'max_pool':
        x_2 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='same')(x_2)
@@ -386,7 +394,7 @@ def build_model_age_regression(LEARNING_RATE, KERNEL_SIZE, POOLING_LAYER):
     x_2 = tf.keras.layers.Dropout(0.25)(x_2)
 
     x_2 = tf.keras.layers.GlobalAveragePooling1D()(x_2)
-    x_2 = tf.keras.layers.Dense(20, activation='relu')(x_2)
+    x_2 = tf.keras.layers.Dense(40, activation='relu')(x_2)
     x_2 = tf.keras.layers.Dense(1, activation='relu')(x_2)
 
 
@@ -548,6 +556,6 @@ def build_model_tuner(hp):
 
 if __name__ == '__main__':
     
-    model = build_model_without_tuner_4(LEARNING_RATE=0.001, KERNEL_SIZE=12, POOLING_LAYER='max_pool')
+    model = build_model_age_regression(LEARNING_RATE=0.001, KERNEL_SIZE=6, POOLING_LAYER='max_pool')
     print(model.summary())
     print(model.name)
