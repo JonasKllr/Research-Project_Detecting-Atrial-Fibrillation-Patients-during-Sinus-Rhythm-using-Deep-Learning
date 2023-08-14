@@ -15,11 +15,41 @@ tf.config.set_visible_devices([], 'GPU')
 
 # load data
 FILE_DIRECTORY = '/beegfs/ws/0/joke793c-research_project/data_sets/cinc/'
-signals = np.load(FILE_DIRECTORY + 'CinC_signals.npy', allow_pickle=False)
-labels = np.loadtxt(FILE_DIRECTORY + 'age_array.txt')
-labels = labels.astype(int)
-print(np.shape(signals))
-print(np.shape(labels))
+signals_temp = np.load(FILE_DIRECTORY + 'CinC_signals.npy', allow_pickle=False)
+labels_temp = np.loadtxt(FILE_DIRECTORY + 'age_array.txt')
+labels_temp = labels_temp.astype(int)
+print(np.shape(signals_temp))
+print(np.shape(labels_temp))
+
+
+
+### create 10% test split ###
+
+# Set a seed for reproducibility
+seed = 42  # You can use any integer value as the seed
+np.random.seed(seed)
+
+# Calculate the size of the test set (10% of the total dataset size)
+test_size = int(0.1 * len(labels_temp))
+
+# Generate random indices for the test set
+test_indices = np.random.choice(len(labels_temp), size=test_size, replace=False)
+
+# Create boolean masks for train and test datasets
+mask = np.ones(len(labels_temp), dtype=bool)
+mask[test_indices] = False
+
+signals = signals_temp[mask]
+labels = labels_temp[mask]
+#signals_test = signals_temp[~mask]
+#labels_test = labels_temp[~mask]
+
+del signals_temp
+del labels_temp
+
+### create 10% test split ###
+
+
 
 # data normalization into range [0.0, 1.0] to filter for signal clipping
 signals_norm = normalize_ecg(signals)
