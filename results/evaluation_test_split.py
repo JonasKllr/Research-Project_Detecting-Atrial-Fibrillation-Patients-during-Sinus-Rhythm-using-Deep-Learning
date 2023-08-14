@@ -25,7 +25,7 @@ def eval_models_one_by_one(test_data):
         model.evaluate(test_data)
 
 
-def eval_models_ensemble(test_data):
+def eval_models_ensemble(test_data, labels):
     
     models = []
     for i in range(5):
@@ -33,19 +33,54 @@ def eval_models_ensemble(test_data):
         model = tf.keras.models.load_model(MODEL_DIR)
         models.append(model)
 
-        input_1 = tf.keras.Input(shape=(1280,1), name='input_1')
-        input_2 = tf.keras.Input(shape=(1280,1), name='input_2')
 
-        # get output for each model input
-        outputs = [model((input_1, input_2)) for model in models]
+    number_samples = np.shape(labels)[0]
+    predictions = np.empty([number_samples, 0])
+    for model in models:
+        predictions_temp = model.predict(test_data)
+        print(predictions_temp)
+        predictions = np.hstack((predictions, predictions_temp))
 
-        x = tf.keras.layers.Average()(outputs)
 
-        ensemble = tf.keras.Model(inputs=[input_1, input_2], outputs=x)
+    predictions = np.where(predictions < 0.5, 0, 1)
+    predictions = np.average(predictions, axis=1)
+    predictions = np.where(predictions < 0.5, 0, 1)
 
-        ensemble.compile(optimizer=tf.keras.optimizers.Adam())
+    unique, counts = np.unique(predictions, return_counts=True)
+    print(unique)
+    print(counts)
 
-        ensemble.evaluate(test_data)
+    # Accuracy
+    correct_pred = np.equal(predictions, labels)
+    unique, counts = np.unique(correct_pred, return_counts=True)
+    print(unique)
+    print(counts)
+
+    accuracy = counts[1] / number_samples
+    print(accuracy)
+
+    true_positives = np.sum(np.logical_and(predictions == 1, labels == 1))
+    false_positives = np.sum(np.logical_and(predictions == 1, labels == 0))
+    false_negatives = np.sum(np.logical_and(predictions == 0, labels == 1))
+
+    precision = true_positives / (true_positives + false_positives)
+    recall = true_positives / (true_positives + false_negatives)
+    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+    print(precision)
+    print(recall)
+    print(f1_score)
+
+
+
+    # get prediction for single segment from all 5 models DONE
+    # average prediction DONE
+    # compare to y_true DONE
+    # fuctions for 
+        # accuracy
+        # precision
+        # recall
+        # f1 score
 
 
 
@@ -93,6 +128,17 @@ test_data_2 = signals[:,:,1]
 test_data = tf.data.Dataset.from_tensor_slices(((test_data_1, test_data_2), labels))
 test_data = test_data.batch(100)
 
+test_data_inference = tf.data.Dataset.from_tensor_slices(((test_data_1, test_data_2), ))
+test_data_inference = test_data_inference.batch(100)
+
+#MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_1/model'
+#model = tf.keras.models.load_model(MODEL_DIR)
+
+#predictions = model.predict(test_data_inference)
+
+
 #eval_models_one_by_one(test_data)
-eval_models_ensemble(test_data)
+eval_models_ensemble(test_data_inference, labels)
+#eval_models_one_by_one(test_data)
+
 
