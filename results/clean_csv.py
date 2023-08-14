@@ -1,10 +1,10 @@
 import numpy as np
 import os
 
-DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/'
+#DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/'
+DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/'
 
-
-for subdir, dirs, files in os.walk(DIR + 'history_ibmt/'):
+for subdir, dirs, files in os.walk(DIR + 'Model_2-blocks_3-layers_per_block_1/'):
     for file in files:
         if file.endswith('history.csv'):
             print(os.path.join(subdir, file))
