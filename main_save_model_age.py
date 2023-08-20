@@ -9,6 +9,7 @@ import my_model
 from data_pipeline.filter_butterworth import butter_bandpass_filter
 from data_pipeline.filter_clipped_segments import find_clipped_segments, delete_clipped_segments_CinC
 from data_pipeline.normalize import normalize_ecg
+from data_pipeline.delete_age_zero_CinC import delete_age_zero_CinC
 
 # force tensorflow to use CPU (for my laptop)
 tf.config.set_visible_devices([], 'GPU')
@@ -18,6 +19,10 @@ FILE_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/
 signals_temp = np.load(FILE_DIRECTORY + 'CinC_signals.npy', allow_pickle=False)
 labels_temp = np.loadtxt(FILE_DIRECTORY + 'age_array.txt')
 labels_temp = labels_temp.astype(int)
+print(np.shape(signals_temp))
+print(np.shape(labels_temp))
+
+signals_temp, labels_temp = delete_age_zero_CinC(signals_temp, labels_temp)
 print(np.shape(signals_temp))
 print(np.shape(labels_temp))
 
@@ -43,6 +48,9 @@ signals = signals_temp[mask]
 labels = labels_temp[mask]
 #signals_test = signals_temp[~mask]
 #labels_test = labels_temp[~mask]
+
+del signals_temp
+del labels_temp
 
 ### create 10% test split ###
 
