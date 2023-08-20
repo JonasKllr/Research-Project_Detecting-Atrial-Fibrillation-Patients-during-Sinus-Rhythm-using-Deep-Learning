@@ -3,7 +3,6 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import os
 
-from datetime import datetime
 from sklearn.model_selection import KFold
 
 import my_model
@@ -17,7 +16,6 @@ tf.config.set_visible_devices([], 'GPU')
 # load data
 FILE_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/'
 signals = np.load(FILE_DIRECTORY + 'CinC_signals.npy', allow_pickle=False)
-#labels = np.load(FILE_DIRECTORY + 'CinC_labels_5.npy', allow_pickle=False)
 labels = np.loadtxt(FILE_DIRECTORY + 'age_array.txt')
 labels = labels.astype(int)
 print(np.shape(signals))
