@@ -114,7 +114,8 @@ def median_dataframe(df: pd.DataFrame):
 
 if __name__ == '__main__':
 
-    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/'
+    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_linear/history/'
 
     raw_df = raw_results_into_dataframe(DIR)
     print(raw_df.head(10))

@@ -81,7 +81,10 @@ def median_dataframe(df: pd.DataFrame):
 
 if __name__ == '__main__':
 
-    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/age/correct/cross_validation/history/Model_age_regression/kernel_6'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/age/correct_no_zeros/history/Model_age_regression/kernel_6'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/age/correct_no_zeros_100_epochs/history/Model_age_regression/kernel_6'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/age/correct_no_zeros_150_epochs_2/history/Model_age_regression/kernel_6'
+    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/age/correct_no_zeros_250_epochs_2/history/Model_age_regression/kernel_6'
 
     raw_df = raw_results_into_dataframe(DIR)
     print(raw_df.head(20))

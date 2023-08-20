@@ -18,7 +18,8 @@ def eval_models_one_by_one(test_data):
     for i in range(5):
 
         # load the model
-        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_{i+1}/model'
+        #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_{i+1}/model'
+        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_linear/history/Model_3-blocks_2-layers_per_block_2/kernel_6/pooling_max_pool/learning_rate_0.01/fold_{i+1}/model'
         model = tf.keras.models.load_model(MODEL_DIR)
         #print(model.summary())
 
@@ -29,7 +30,8 @@ def eval_models_ensemble(test_data, labels):
     
     models = []
     for i in range(5):
-        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_{i+1}/model'
+        #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_{i+1}/model'
+        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_linear/history/Model_3-blocks_2-layers_per_block_2/kernel_6/pooling_max_pool/learning_rate_0.01/fold_{i+1}/model'
         model = tf.keras.models.load_model(MODEL_DIR)
         models.append(model)
 
@@ -57,7 +59,7 @@ def eval_models_ensemble(test_data, labels):
     print(counts)
 
     accuracy = counts[1] / number_samples
-    print(accuracy)
+    print('Accuracy:', accuracy)
 
     true_positives = np.sum(np.logical_and(predictions == 1, labels == 1))
     false_positives = np.sum(np.logical_and(predictions == 1, labels == 0))
@@ -67,23 +69,9 @@ def eval_models_ensemble(test_data, labels):
     recall = true_positives / (true_positives + false_negatives)
     f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
-    print(precision)
-    print(recall)
-    print(f1_score)
-
-
-
-    # get prediction for single segment from all 5 models DONE
-    # average prediction DONE
-    # compare to y_true DONE
-    # fuctions for 
-        # accuracy
-        # precision
-        # recall
-        # f1 score
-
-
-
+    print('Precision:', precision)
+    print('Recall:', recall)
+    print('f1 Score:', f1_score)
 
 
 
@@ -137,7 +125,7 @@ test_data_inference = test_data_inference.batch(100)
 #predictions = model.predict(test_data_inference)
 
 
-#eval_models_one_by_one(test_data)
+eval_models_one_by_one(test_data)
 eval_models_ensemble(test_data_inference, labels)
 #eval_models_one_by_one(test_data)
 

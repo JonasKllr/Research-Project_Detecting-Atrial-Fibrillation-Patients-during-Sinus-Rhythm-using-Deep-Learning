@@ -54,6 +54,16 @@ def delete_clipped_segments(signals, labels, patient_number_array, ROWS_TO_DELET
     return signals_deleted, labels_deleted, patient_number_array_deleted
 
 
+def delete_clipped_segments_CinC(signals, labels, ROWS_TO_DELETE):
+    
+    print('Deleting clipped segments ...')
+
+    signals_deleted = np.delete(signals, ROWS_TO_DELETE, axis=0)
+    labels_deleted = np.delete(labels, ROWS_TO_DELETE, axis=0)
+
+    return signals_deleted, labels_deleted
+
+
 
 
 

@@ -9,6 +9,7 @@ import my_model_taurus
 from data_pipeline_taurus.filter_butterworth import butter_bandpass_filter
 from data_pipeline_taurus.filter_clipped_segments import find_clipped_segments, delete_clipped_segments_CinC
 from data_pipeline_taurus.normalize import normalize_ecg
+from data_pipeline_taurus.delete_age_zero_CinC import delete_age_zero_CinC
 
 # force tensorflow to use CPU (for my laptop)
 tf.config.set_visible_devices([], 'GPU')
@@ -18,6 +19,10 @@ FILE_DIRECTORY = '/beegfs/ws/0/joke793c-research_project/data_sets/cinc/'
 signals_temp = np.load(FILE_DIRECTORY + 'CinC_signals.npy', allow_pickle=False)
 labels_temp = np.loadtxt(FILE_DIRECTORY + 'age_array.txt')
 labels_temp = labels_temp.astype(int)
+print(np.shape(signals_temp))
+print(np.shape(labels_temp))
+
+signals_temp, labels_temp = delete_age_zero_CinC(signals_temp, labels_temp)
 print(np.shape(signals_temp))
 print(np.shape(labels_temp))
 
@@ -85,7 +90,7 @@ kfold = KFold(n_splits=5, shuffle=True, random_state=21)
 
 
 # Hyperparameters
-MODEL_ARCHITECTURE = ['age']
+MODEL_ARCHITECTURE = ['age_linear']
 KERNEL_SIZE = [6]
 POOLING_LAYER = ['max_pool']
 LEARNING_RATE = [1e-2, 1e-3, 1e-4]
@@ -130,6 +135,8 @@ for model_choice in MODEL_ARCHITECTURE:
                         model = my_model_taurus.build_model_without_tuner_4(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
                     elif model_choice == 'age':
                         model = my_model_taurus.build_model_age_regression(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
+                    elif model_choice == 'age_linear':
+                        model = my_model_taurus.build_model_age_regression_linear(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
                     
                     print(model.summary())
 
@@ -182,8 +189,8 @@ for model_choice in MODEL_ARCHITECTURE:
                     validation_accuracy = history.history['val_mean_squared_error']
 
                     # Convert accuracy to percentage values
-                    training_accuracy_percent = [acc * 100 for acc in training_accuracy]
-                    validation_accuracy_percent = [acc * 100 for acc in validation_accuracy]
+                    training_accuracy_percent = [acc * 1 for acc in training_accuracy]
+                    validation_accuracy_percent = [acc * 1 for acc in validation_accuracy]
 
                     num_epochs = len(history.history['loss'])
                     epochs = range(1, num_epochs + 1)

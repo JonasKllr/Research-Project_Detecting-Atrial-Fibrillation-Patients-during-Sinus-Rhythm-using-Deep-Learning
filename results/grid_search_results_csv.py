@@ -10,7 +10,7 @@ def raw_results_into_dataframe(DIR):
     best_values = [['model', 'kernel_size', 'pooling_layer', 'learning_rate', 'fold', 'epoch', 'binary_accuracy', 'f1_score', 'loss', 'val_binary_accuracy', 'val_f1_score', 'val_loss']]
     
     # get information from file path and history.csv
-    for subdir, dir, files in os.walk(DIR + 'history_ibmt/'): # history_taurus/history/, history_ibmt/
+    for subdir, dir, files in os.walk(DIR): # history_taurus/history/, history_ibmt/
         for file in files:
             
             if file.endswith('history_cleaned.csv'):
@@ -109,17 +109,30 @@ def median_dataframe(df: pd.DataFrame):
 
     return median_results
 
+def std_dataframe(df: pd.DataFrame):
+
+    std_results = df.groupby(['model', 'kernel_size', 'pooling_layer', 'learning_rate']).std()
+    #print(mean_results.head(24))
+
+    return std_results
+
 
 if __name__ == '__main__':
 
-    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/'
+    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/history_taurus_linear/history/'
 
     raw_df = raw_results_into_dataframe(DIR)
 
     mean_results = mean_dataframe(raw_df)
     median_results = median_dataframe(raw_df)
+    std_results = std_dataframe(raw_df)
     mean_results = mean_results[mean_results.columns].astype(float) 
-    median_results = median_results[median_results.columns].astype(float) 
+    median_results = median_results[median_results.columns].astype(float)
+    std_results = std_results[std_results.columns].astype(float)
+
+    mean_minus_median = mean_results.subtract(std_results)
+
+    print(std_results.head(24))
 
     x_label_list = ['KS 3 - PL avg', 'KS 3 - PL max', 'KS 6 - PL avg', 'KS 6 - PL max', 'KS 9 - PL avg', 'KS 9 - PL max', 'KS 12 - PL avg', 'KS 12 - PL max']
     y_label_list = ['Model 1 - LR 0.0001', 'Model 1 - LR 0.001', 'Model 1 - LR 0.01', 'Model 2 - LR 0.0001', 'Model 2 - LR 0.001', 'Model 2 - LR 0.01', 'Model 3 - LR 0.0001', 'Model 3 - LR 0.001', 'Model 3 - LR 0.01', 'Model 4 - LR 0.0001', 'Model 4 - LR 0.001', 'Model 4 - LR 0.01']
@@ -133,6 +146,19 @@ if __name__ == '__main__':
     ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
     ax.set_title('Mean Accuracy', weight='bold')
+    ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
+    ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    plt.tight_layout()
+
+
+    fig, ax = plt.subplots()
+    sns.heatmap(mean_minus_median.pivot_table(
+        values='val_binary_accuracy',
+        index=['model', 'learning_rate'],
+        columns=['kernel_size', 'pooling_layer']
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+
+    ax.set_title('(Mean - StdDev) Accuracy', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
     plt.tight_layout()
@@ -159,6 +185,19 @@ if __name__ == '__main__':
     ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
     ax.set_title('Mean f1-Score', weight='bold')
+    ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
+    ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    plt.tight_layout()
+
+
+    fig, ax = plt.subplots()
+    sns.heatmap(mean_minus_median.pivot_table(
+        values='val_f1_score',
+        index=['model', 'learning_rate'],
+        columns=['kernel_size', 'pooling_layer']
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+
+    ax.set_title('(Mean - StdDev) f1-Score', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
     plt.tight_layout()
