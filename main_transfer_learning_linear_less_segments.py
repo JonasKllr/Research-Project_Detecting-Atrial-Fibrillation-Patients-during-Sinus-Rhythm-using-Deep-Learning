@@ -35,7 +35,6 @@ print(np.shape(patient_number_array))
 print(np.shape(patient_number_array_unique))
 
 # get 35 equaly spaced segments from each patient 
-
 signals, labels, patient_number_array = less_segments(signals, labels, patient_number_array)
 patient_number_array_unique = np.unique(patient_number_array, return_counts=True)
 
@@ -43,6 +42,8 @@ print(np.shape(signals))
 print(np.shape(labels))
 print(np.shape(patient_number_array))
 print(np.shape(patient_number_array_unique))
+
+patient_number_array_unique = np.unique(patient_number_array, return_index=False)
 
 
 # Butterworth filter

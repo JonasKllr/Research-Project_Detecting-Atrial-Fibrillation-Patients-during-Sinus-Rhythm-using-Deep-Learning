@@ -45,23 +45,16 @@ if __name__ == '__main__':
     t = np.linspace(0, RECORD_DURATION_SECONDS, nsamples, endpoint=False)
 
     x = record.p_signal
+    y = butter_bandpass_filter(x, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
 
 
     plt.figure(2)
-    plt.clf()
     plt.plot(t, x, label='Original signal')
-
-    y = butter_bandpass_filter(x, LOWCUT, HIGHCUT, FREQUENCY_HERTZ, ORDER)
-    print(np.shape(y))
-    print(type(y))
-
     plt.plot(t, y, label='Filtered signal')
-    plt.xlabel('time (seconds)')
-    plt.grid(True)
-    plt.axis('tight')
+    plt.xlabel('time [seconds]')
+    plt.ylabel('voltage [mV]')
     plt.legend(loc='upper left')
 
-    SAFE_DIRECTORY = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/figures/paf_pred_challenge/'
-    #plt.savefig(SAFE_DIRECTORY + 'n01_filtered.png')
 
+    plt.tight_layout()
     plt.show()

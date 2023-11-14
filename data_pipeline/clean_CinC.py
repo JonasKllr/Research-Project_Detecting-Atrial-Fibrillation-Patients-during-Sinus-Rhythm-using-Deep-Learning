@@ -157,7 +157,7 @@ def get_age_distribution(DIRECTORY):
             age = np.append(age, age_temp)
 
     
-    np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/age_array.txt', age, fmt='%d')
+    #np.savetxt('/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/age_array_with_300.txt', age, fmt='%d')
 
     # histogram
     plt.hist(age, bins='auto')
@@ -178,18 +178,25 @@ if __name__ == '__main__':
 
     dir = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/'
 
+    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/datasets/CinC/training_prepared/sinus_and_age_only/'
+    
+
+
     array_file = dir + 'age_array.txt'
     age = np.loadtxt(array_file)
 
     labels = np.load(dir + 'CinC_labels_5.npy', allow_pickle=False)
     labels = labels.astype(int)
 
-    print(age.max())
+    unique_values, counts = np.unique(age, return_counts=True)
+    plt.bar(unique_values, counts, align='center')
 
-    plt.hist(age, bins=5 ,density=False)
-    plt.title('Age grouped in 5 categories')
-    plt.xlabel('Age [years]')
-    plt.ylabel('Frequency [-]')
+
+    #plt.hist(age, bins=301 ,density=False)
+    plt.xlabel('age [years]')
+    plt.ylabel('frequency [-]')
+
+    plt.tight_layout()
     plt.show()
 
 
