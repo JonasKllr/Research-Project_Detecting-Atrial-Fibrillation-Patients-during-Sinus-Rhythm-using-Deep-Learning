@@ -150,13 +150,14 @@ print(predictions.head())
 sns.set_style("darkgrid")
 
 plt.figure()
-sns.regplot(x='true', y='fold_1', data=predictions, ci=None, line_kws={'color':'red'}, scatter_kws={'edgecolors':'white', 'alpha':1, 'linewidths':0.5})
-sns.lineplot(data=perfect_df, x='pred', y='true', color='grey', linestyle='--')
+sns.regplot(x='true', y='fold_1', data=predictions, fit_reg=False, ci=None, line_kws={'color':'red'}, scatter_kws={'edgecolors':'white', 'alpha':1, 'linewidths':0.5})
+#sns.lineplot(data=perfect_df, x='pred', y='true', color='grey', linestyle='--')
 plt.xlim((-5, 100))
 plt.ylim((-5, 100))
 plt.xlabel('age true [years]')
 plt.ylabel('age predicted [years]')
-plt.title('Fold 1')
+#plt.title('Fold 1')
+plt.legend(['Individual Predictions'], loc='upper left')
 plt.tight_layout()
 
 

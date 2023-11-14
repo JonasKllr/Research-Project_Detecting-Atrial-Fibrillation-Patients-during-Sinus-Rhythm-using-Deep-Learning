@@ -44,8 +44,8 @@ def raw_results_into_dataframe(DIR):
                     row_temp.append(0.001)
                 elif subdir[len(subdir)-2] == "learning_rate_0.0001":
                     row_temp.append(0.0001)
-                #elif subdir[len(subdir)-2] == "learning_rate_0.00001":
-                #    row_temp.append(0.00001)
+                elif subdir[len(subdir)-2] == "learning_rate_0.00001":
+                    row_temp.append(0.00001)
                 else:
                     pass
 
@@ -106,14 +106,16 @@ def std_dataframe(df: pd.DataFrame):
 
 if __name__ == '__main__':
 
-    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning/history/'
-    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning/history_document/'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning_less_segments_batch_8/history/'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning_lesser_segments_batch_4/history/'
+    #DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning_lesser9_segments_batch_4/history/'
+    DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning_lesser5_segments_batch_4/history/'
 
     raw_df = raw_results_into_dataframe(DIR)
     print(raw_df.head(90))
     
     # print specific rows
-    print(raw_df.loc[raw_df['num_trained_layers'] == 6])
+    print(raw_df.loc[raw_df['num_trained_layers'] == 5])
 
     mean_results = mean_dataframe(raw_df)
     median_results = median_dataframe(raw_df)
@@ -135,12 +137,11 @@ if __name__ == '__main__':
         values='val_binary_accuracy',
         index=['learning_rate'],
         columns=['num_trained_layers']
-    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
 
-    #ax.set_title('Mean Accuracy', weight='bold')
-    ax.set_xlabel('Number Retrained Layers', weight='bold')
+    ax.set_title('Mean Accuracy', weight='bold')
+    ax.set_xlabel('Number Trained Layers', weight='bold')
     ax.set_ylabel('Learning Rate', weight='bold')
-    ax.collections[0].colorbar.set_label('Mean Accuracy [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -149,12 +150,11 @@ if __name__ == '__main__':
         values='val_binary_accuracy',
         index=['learning_rate'],
         columns=['num_trained_layers']
-    ), annot=True, fmt=".2f", cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
 
-    #ax.set_title('(Mean - StdDev) Accuracy', weight='bold')
-    ax.set_xlabel('Number Retrained Layers', weight='bold')
+    ax.set_title('(Mean - StdDev) Accuracy', weight='bold')
+    ax.set_xlabel('Number Trained Layers', weight='bold')
     ax.set_ylabel('Learning Rate', weight='bold')
-    ax.collections[0].colorbar.set_label('(Mean - StdDev) Accuracy [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
 
     ax.set_title('Median Accuracy', weight='bold')
-    ax.set_xlabel('Number Retrained Layers', weight='bold')
+    ax.set_xlabel('Number Trained Layers', weight='bold')
     ax.set_ylabel('Learning Rate', weight='bold')
     plt.tight_layout()
 
@@ -176,12 +176,11 @@ if __name__ == '__main__':
         values='val_f1_score',
         index=['learning_rate'],
         columns=['num_trained_layers']
-    ), annot=True, fmt=".2f", cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
 
-    #ax.set_title('Mean f1-Score', weight='bold')
-    ax.set_xlabel('Number Retrained Layers', weight='bold')
+    ax.set_title('Mean f1-Score', weight='bold')
+    ax.set_xlabel('Number Trained Layers', weight='bold')
     ax.set_ylabel('Learning Rate', weight='bold')
-    ax.collections[0].colorbar.set_label('Mean F1-Score [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -190,12 +189,11 @@ if __name__ == '__main__':
         values='val_f1_score',
         index=['learning_rate'],
         columns=['num_trained_layers']
-    ), annot=True, fmt=".2f", cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
 
-    #ax.set_title('(Mean - StdDev) f1-Score', weight='bold')
-    ax.set_xlabel('Number Retrained Layers', weight='bold')
+    ax.set_title('(Mean - StdDev) f1-Score', weight='bold')
+    ax.set_xlabel('Number Trained Layers', weight='bold')
     ax.set_ylabel('Learning Rate', weight='bold')
-    ax.collections[0].colorbar.set_label('(Mean - StdDev) F1-Score [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -204,10 +202,10 @@ if __name__ == '__main__':
         values='val_f1_score',
         index=['learning_rate'],
         columns=['num_trained_layers']
-    ), annot=True, fmt=".2f", cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
+    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5)   # mako_r, crest
 
     ax.set_title('Median f1-Score', weight='bold')
-    ax.set_xlabel('Number Retrained Layers', weight='bold')
+    ax.set_xlabel('Number Trained Layers', weight='bold')
     ax.set_ylabel('Learning Rate', weight='bold')
     plt.tight_layout()
 

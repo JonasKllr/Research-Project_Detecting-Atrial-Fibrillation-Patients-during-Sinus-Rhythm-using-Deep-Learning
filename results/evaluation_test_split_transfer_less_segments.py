@@ -20,7 +20,7 @@ def eval_models_one_by_one(test_data):
         # load the model
         #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_{i+1}/model'
         #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_linear/history/Model_3-blocks_2-layers_per_block_2/kernel_6/pooling_max_pool/learning_rate_0.01/fold_{i+1}/model'
-        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning/history/Model_3_transfer_learning_5/learning_rate_0.01/fold_{i+1}/model'
+        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning_less_segments/history/Model_3_transfer_learning_3/learning_rate_0.001/fold_{i+1}/model'
         #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning/layer3_150_epochs/history/Model_3_transfer_learning_3/learning_rate_1e-05/fold_{i+1}/model'
 
         model = tf.keras.models.load_model(MODEL_DIR)
@@ -35,7 +35,7 @@ def eval_models_ensemble(test_data, labels):
     for i in range(5):
         #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_fourth_try/history/Model_2-blocks_3-layers_per_block_1/kernel_6/pooling_max_pool/learning_rate_0.001/fold_{i+1}/model'
         #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/models/best_hyper_params_linear/history/Model_3-blocks_2-layers_per_block_2/kernel_6/pooling_max_pool/learning_rate_0.01/fold_{i+1}/model'
-        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning/history/Model_3_transfer_learning_6/learning_rate_0.01/fold_{i+1}/model'
+        MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning_less_segments/history/Model_3_transfer_learning_3/learning_rate_0.001/fold_{i+1}/model'
         #MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/transfer_learning/layer3_150_epochs/history/Model_3_transfer_learning_3/learning_rate_1e-05/fold_{i+1}/model'
     
         model = tf.keras.models.load_model(MODEL_DIR)
@@ -50,7 +50,7 @@ def eval_models_ensemble(test_data, labels):
         predictions = np.hstack((predictions, predictions_temp))
 
 
-    predictions = np.where(predictions < 0.5, 0, 1)
+    #predictions = np.where(predictions < 0.5, 0, 1)
     predictions = np.average(predictions, axis=1)
     predictions = np.where(predictions < 0.5, 0, 1)
     # 5.3 for model 3 LR 0.01
@@ -125,7 +125,7 @@ test_data_2 = signals[:,:,1]
 
 
 ########################################################PLOTTING#######################################################################
-PLOTTING = False
+PLOTTING = True
 
 if PLOTTING:
     # set record parameters

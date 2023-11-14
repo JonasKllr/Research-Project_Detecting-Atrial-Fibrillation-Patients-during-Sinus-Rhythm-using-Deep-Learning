@@ -96,13 +96,17 @@ if __name__ == '__main__':
 
     plt.figure()
     sns.boxplot(x=raw_df['learning_rate'], y=raw_df['val_loss (MAE)'], showfliers=False, whis=[0,100])
-    #sns.stripplot(data=raw_df, x='learning_rate', y='val_loss (MAE)', jitter=True)
+    plt.ylabel('Mean Absolute Error [years]')
+    plt.xlabel('Learning Rate [-]')
     plt.tight_layout()
 
     plt.figure()
     sns.boxplot(x=raw_df['learning_rate'], y=raw_df['val_mean_squared_error'], showfliers=False, whis=[0,100])
-    #sns.stripplot(data=raw_df, x='learning_rate', y='val_mean_squared_error', jitter=True)
+    plt.ylabel('Mean Squared Error [years²]')
+    plt.xlabel('Learning Rate [-]')
     plt.tight_layout()
+    
+    
     plt.show()
 
 

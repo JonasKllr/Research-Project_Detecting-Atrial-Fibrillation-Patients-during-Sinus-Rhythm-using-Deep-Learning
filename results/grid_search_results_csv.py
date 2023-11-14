@@ -122,6 +122,7 @@ if __name__ == '__main__':
     DIR = '/media/jonas/SSD_new/CMS/Semester_4/research_project/history/history_taurus_linear/history/'
 
     raw_df = raw_results_into_dataframe(DIR)
+    print(raw_df.loc[raw_df['model'] == 'model_3'].loc[raw_df['kernel_size'] == 6].loc[raw_df['pooling_layer'] == 'max_pool'])
 
     mean_results = mean_dataframe(raw_df)
     median_results = median_dataframe(raw_df)
@@ -143,11 +144,12 @@ if __name__ == '__main__':
         values='val_binary_accuracy',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
-    ax.set_title('Mean Accuracy', weight='bold')
+    #ax.set_title('Mean Accuracy', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    ax.collections[0].colorbar.set_label('Mean Accuracy [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -156,11 +158,12 @@ if __name__ == '__main__':
         values='val_binary_accuracy',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
-    ax.set_title('(Mean - StdDev) Accuracy', weight='bold')
+    #ax.set_title('(Mean - StdDev) Accuracy', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    ax.collections[0].colorbar.set_label('(Mean - StdDev) Accuracy [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -169,7 +172,7 @@ if __name__ == '__main__':
         values='val_binary_accuracy',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
     ax.set_title('Median Accuracy', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
@@ -182,11 +185,12 @@ if __name__ == '__main__':
         values='val_f1_score',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
-    ax.set_title('Mean f1-Score', weight='bold')
+    #ax.set_title('Mean f1-Score', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    ax.collections[0].colorbar.set_label('Mean F1-Score [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -195,11 +199,12 @@ if __name__ == '__main__':
         values='val_f1_score',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
-    ax.set_title('(Mean - StdDev) f1-Score', weight='bold')
+    #ax.set_title('(Mean - StdDev) f1-Score', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')
     ax.set_ylabel('Model - Learning Rate (LR)', weight='bold')
+    ax.collections[0].colorbar.set_label('(Mean - StdDev) F1-Score [-]', weight='bold')
     plt.tight_layout()
 
 
@@ -208,7 +213,7 @@ if __name__ == '__main__':
         values='val_f1_score',
         index=['model', 'learning_rate'],
         columns=['kernel_size', 'pooling_layer']
-    ), annot=True ,cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
+    ), annot=True, fmt=".2f",cmap='mako_r', cbar=1, linewidths=0.5, xticklabels=x_label_list, yticklabels=y_label_list)   # mako_r, crest
 
     ax.set_title('Median f1-Score', weight='bold')
     ax.set_xlabel('Kernel Size (KS) - Pooling Layer (PL)', weight='bold')

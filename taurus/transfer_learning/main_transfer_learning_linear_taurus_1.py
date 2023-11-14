@@ -12,6 +12,7 @@ from data_pipeline_taurus.load_dataset_without_filter import load_dataset_PAF
 from data_pipeline_taurus.filter_butterworth import butter_bandpass_filter
 from data_pipeline_taurus.filter_clipped_segments import find_clipped_segments, delete_clipped_segments
 from data_pipeline_taurus.normalize import normalize_ecg
+from data_pipeline_taurus.less_segments import less_segments
 
 # force tensorflow to use CPU (for my laptop)
 tf.config.set_visible_devices([], 'GPU')
@@ -36,6 +37,14 @@ print(np.shape(labels))
 print(np.shape(patient_number_array))
 print(np.shape(patient_number_array_unique))
 
+# get 35 equaly spaced segments from each patient 
+signals, labels, patient_number_array = less_segments(signals, labels, patient_number_array)
+patient_number_array_unique = np.unique(patient_number_array, return_counts=True)
+
+print(np.shape(signals))
+print(np.shape(labels))
+print(np.shape(patient_number_array))
+print(np.shape(patient_number_array_unique))
 
 # Butterworth filter
 LOWCUT = 0.3
@@ -55,7 +64,7 @@ print(np.shape(labels))
 # k-fold cross validation split
 kfold = KFold(n_splits=5, shuffle=True, random_state=21)
 
-LEARNING_RATE = [1e-2, 1e-3, 1e-4]
+LEARNING_RATE = [1e-2, 1e-3, 1e-4, 1e-5]
 
 for learning_rate_choice in LEARNING_RATE:
 
