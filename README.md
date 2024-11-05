@@ -14,3 +14,8 @@ In a further experiment including less recordings per subject in the training da
 The results from the age estimation model showed that the chosen deep learning approach is able to learn subtle featuresfrom SR ECGs recordings.
 However, the models could not reliably distinguish between AF and non-AF SR ECGs.
 The size of the CinC 2001 dataset was identiﬁed as the main limitation of the approach.
+
+## Concept
+|<img src="./img/concept.png" alt="drawing" width="500"/>|
+|:--:|
+|Conceptual steps conducted in the project.|
