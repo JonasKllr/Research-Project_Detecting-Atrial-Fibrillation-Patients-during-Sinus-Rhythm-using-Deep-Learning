@@ -52,6 +52,38 @@ One by one, the layers were made trainable and the model was re-trianed with the
 
 The best performing models found in step one and step three were then compared to investigate the influence of transfer learning.
 
+<!-- TODO maybe the figure of the final ECG? -->
+
+
+## Results
+
+### Without Transfer Learning
+
+<table>
+  <tr>
+    <td>
+      <div align="center">
+        <img src="./img/results/accuracy_mean_grid-search.png" alt="drawing" width="500"/>
+      </div>
+    </td>
+    <td>
+      <div align="center">
+        <img src="./img/results/f1_mean_grid-search.png" alt="drawing" width="500"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div align="center">Results of the grid search measured in accuracy (left) and F1-score (right). The horizontal axis shows the tested kernel sizes in the convolutional layers in the ﬁrst block of each individual path of the network as well as the different tested types of pooling layers. The vertical axis shows the tested model architectures as well as the tested learning rates. Each cell represents one combination of tested hyperparameters. The value of a cell was calculated from a ﬁve-fold cross validation. The values are scaled to the range between zero and one..</div>
+    </td>
+  </tr>
+</table>
+
+
+### Regression
+
+### With Transfer Learning
+
 
 ## Bibliography 
 
