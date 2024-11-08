@@ -53,6 +53,7 @@ One by one, the layers were made trainable and the model was re-trianed with the
 The best performing models found in step one and step three were then compared to investigate the influence of transfer learning.
 
 <!-- TODO maybe the figure of the final ECG? -->
+<!-- also CNN model? -->
 
 
 ## Results
@@ -74,15 +75,53 @@ The best performing models found in step one and step three were then compared t
   </tr>
   <tr>
     <td colspan="2">
-      <div align="center">Results of the grid search measured in accuracy (left) and F1-score (right). The horizontal axis shows the tested kernel sizes in the convolutional layers in the ﬁrst block of each individual path of the network as well as the different tested types of pooling layers. The vertical axis shows the tested model architectures as well as the tested learning rates. Each cell represents one combination of tested hyperparameters. The value of a cell was calculated from a ﬁve-fold cross validation. The values are scaled to the range between zero and one..</div>
+      <div align="center">Results of the grid search measured in mean accuracy (left) and mean F1-score (right). The horizontal axis shows the tested kernel sizes (KS) in the convolutional layers in the ﬁrst block of each individual path of the network as well as the different tested types of pooling layers (PL). The vertical axis shows the tested model architectures as well as the tested learning rates (LR). Each cell represents one combination of tested hyperparameters. The value of a cell was calculated from a ﬁve-fold cross validation. The values are scaled to the range between zero and one.</div>
     </td>
   </tr>
 </table>
 
+TODO results on test data!!
 
 ### Regression
 
+|<img src="./img/results/regression_scatter.png" alt="drawing" width="600"/>|
+|:--:|
+|Individual age predictions of the ﬁnal regression model for the recordings in the test data split after recordings labeled with the age of zero were removed from the training and test data split. A linear regression was ﬁtted on the predictions and shown as red line. Optimal predictions would lie on a line with a slope of one (dashed black line). The model was trained for 132 epochs and resulted in a mean squared error (MAE) of 11.5 years on the test data split.|
+
+
 ### With Transfer Learning
+
+<table>
+  <tr>
+    <td>
+      <div align="center">
+        <img src="./img/results/accuracy_mean_transfer-learning.png" alt="drawing" width="500"/>
+      </div>
+    </td>
+    <td>
+      <div align="center">
+        <img src="./img/results/f1_mean_transfer-learning.png" alt="drawing" width="500"/>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div align="center">Results of the ﬁnal transfer learning step measured in mean accuracy (left) and mean F1-score (right). The horizontal axis shows the tested number of layers that were retrained for the main classiﬁcation problem. The vertical axis shows the tested learning rates. Each cell represents one combination of tested learning rate and number of retrained layers. The value of a cell was calculated from a ﬁve-fold cross validation. The values are scaled to the range between zero and one.</div>
+    </td>
+  </tr>
+</table>
+
+TODO results on test data!!
+
+## Discussion
+
+Both networks, with and without transfer learning, failed to reliably distinguish between patients with and without AF.
+The results of the regression problem, however, suggest that the chosen model architecture is able to find to subtle patterns in ECG recordings.
+The main challenge in this project compared to publications with the same goal was the small size of the dataset in terms of different patients.
+Furthermore, the number of ECG recordings per subject were high compared to other publicaitons.
+This could lead the network to learn subject specifc features in the data instead of AF specifc features.
+Further studies were conducted by including a fewer number of ECG recordings per subject.
+This approach did not lead to a better classiﬁcation performance.
 
 
 ## Bibliography 
