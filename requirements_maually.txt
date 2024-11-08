@@ -1,6 +1,6 @@
-matplotlib (module)
+matplotlib
 numpy
-scikit-learn (module)
-scipy (module)
-tensorflow (module)
+scikit-learn
+scipy
+tensorflow
 wfdb

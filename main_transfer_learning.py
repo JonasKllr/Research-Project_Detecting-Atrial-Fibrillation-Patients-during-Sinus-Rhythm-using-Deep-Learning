@@ -34,7 +34,6 @@ print(np.shape(labels))
 print(np.shape(patient_number_array))
 print(np.shape(patient_number_array_unique))
 
-
 # Butterworth filter
 LOWCUT = 0.3
 HIGHCUT = 50
@@ -88,7 +87,6 @@ for learning_rate_choice in LEARNING_RATE:
         train_data = train_data.batch(32)
         test_data = test_data.batch(100)
 
-        
         MODEL_DIR = f'/media/jonas/SSD_new/CMS/Semester_4/research_project/history/age/correct_245_epochs_all_data/history/Model_age_regression/kernel_6/pooling_max_pool/learning_rate_0.001/fold_1/model'
 
         model = tf.keras.models.load_model(MODEL_DIR)
@@ -135,10 +133,6 @@ for learning_rate_choice in LEARNING_RATE:
 
         model.summary()
 
-
-
-
-
         # Generate a print
         print('------------------------------------------------------------------------')
         print(f'Training for fold {fold_number} ...')
@@ -150,7 +144,6 @@ for learning_rate_choice in LEARNING_RATE:
                     + f'fold_{fold_number}')
         os.makedirs(LOG_DIR)
         
-
         # Tensorboard callback
         TB_DIR = LOG_DIR + '/tensorboard/'
         os.makedirs(TB_DIR)

@@ -113,10 +113,7 @@ for learning_rate_choice in LEARNING_RATE:
         base_output_1 = model.get_layer('concatenate_frozen').output
         #base_output_2 = model.get_layer('dense_2_frozen').output
 
-
-        #x_1 = tf.keras.layers.Dense(1, activation='linear')(base_output_1)
-
-    
+        #x_1 = tf.keras.layers.Dense(1, activation='linear')(base_output_1)    
         #x_2 = tf.keras.layers.Dense(1, activation='linear')(base_output_2)
 
         # combining both paths
