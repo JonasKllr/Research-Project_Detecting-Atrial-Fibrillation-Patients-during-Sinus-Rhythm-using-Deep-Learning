@@ -60,7 +60,7 @@ test_data = tf.data.Dataset.from_tensor_slices(((test_data_1, test_data_2), test
 train_data = train_data.batch(32)
 test_data = test_data.batch(100)
 
-model = my_model.build_model_without_tuner_4()
+model = my_model.build_model_4()
 print(model.summary())
 
 # Tensorboard callback

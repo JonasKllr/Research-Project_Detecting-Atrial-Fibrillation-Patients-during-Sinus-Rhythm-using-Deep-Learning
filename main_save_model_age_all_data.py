@@ -113,13 +113,13 @@ for model_choice in MODEL_ARCHITECTURE:
 
                 # chose model to train
                 if model_choice == 'Model_1':
-                    model = my_model.build_model_without_tuner_1(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice) 
+                    model = my_model.build_model_1(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice) 
                 elif model_choice == 'Model_2':
-                    model = my_model.build_model_without_tuner_2(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
+                    model = my_model.build_model_2(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
                 elif model_choice == 'Model_3':
-                    model = my_model.build_model_without_tuner_3(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
+                    model = my_model.build_model_3(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
                 elif model_choice == 'Model_4':
-                    model = my_model.build_model_without_tuner_4(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
+                    model = my_model.build_model_4(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
                 elif model_choice == 'age':
                     model = my_model.build_model_age_regression(LEARNING_RATE=learning_rate_choice, KERNEL_SIZE=kernel_choice, POOLING_LAYER=pooling_choice)
                 
