@@ -80,7 +80,10 @@ The best performing models found in step one and step three were then compared t
   </tr>
 </table>
 
-TODO results on test data!!
+The combination of model architecture three, learning rate 0.01, kernel size six and pooling layer max-pooling resulted in the highest value and therefore best performance across all metrics.
+The models with this combination resulting from the five-fold cross validation were evaluated as an ensemble of models on a test data split.
+The classiﬁcation of the ensemble for a single recording was evaluated as a vote from the classiﬁcations of the ﬁve models.
+The ensemble produced an accuracy of 53.00 % and an F1-score of 68.20 % on the test data split.
 
 ### Regression
 
@@ -111,11 +114,13 @@ TODO results on test data!!
   </tr>
 </table>
 
-TODO results on test data!!
+The model condidered to be best performing was the model retraind in six layers with a learning rate of 0.01.
+The models with this combination resulting from a five-fold cross validation were again evaluated as a ensemble ob models on a test data split.
+The ensemble produced an accuracy of 53.52 % and an F1-score of 68.05 % on the test data split.
 
 ## Discussion
 
-Both networks, with and without transfer learning, failed to reliably distinguish between patients with and without AF.
+Both networks, with and without transfer learning, failed to reliably distinguish between patients with and without AF on the test data split.
 The results of the regression problem, however, suggest that the chosen model architecture is able to find to subtle patterns in ECG recordings.
 The main challenge in this project compared to publications with the same goal was the small size of the dataset in terms of different patients.
 Furthermore, the number of ECG recordings per subject were high compared to other publicaitons.
@@ -129,3 +134,9 @@ This approach did not lead to a better classiﬁcation performance.
 - [CinC2001] George Moody et al. “Predicting the onset of paroxysmal atrial ﬁbrillation: The Computers in Cardiology Challenge 2001”. In: Computers in Cardiology 2001. Vol. 28 (Cat. No. 01CH37287). IEEE. 2001, pp. 113–116.
 - [CinC2021] Matthew A Reyna et al. “Will two do? Varying dimensions in electrocardiography: the PhysioNet/Computing in Cardiology Challenge 2021”. In: 2021 Computing in Cardiology (CinC). Vol. 48. IEEE. 2021, pp. 1–4.
 - [butterworth] Stephen Butterworth et al. “On the theory of ﬁlter ampliﬁers”. In: Wireless Engineer 7.6 (1930), pp. 536–541.
+
+## Appendix
+
+|<img src="./img/cnn_model.png" alt="drawing" width="600"/>|
+|:--:|
+|Visualization of one out of four architectures of a model used in a grid search. The shown architecture is referred to as model four and was the smallest tested model in terms of trainable parameters. The model consists of two identical paths. Each path is built from two blocks of layers with an identical order of layers. The blocks contain one convolutional layer, one batch normalization layes, one pooling layer and one dropout layer. After the last block, each path contains a global average pooling layer that transforms the shape of the output of its previous layer so that it is processable by a dense layer. Two dense layers are applied at the end of each path where the last layer produces a single value as output for its individual path. The outputs of both paths are concatenated to a common dense layer that produces the output of the network. Parameters kernel size (KS) of the convolutional layers in the ﬁrst block of each path and type of pooling operation in all pooling layers are assigned multiple options which were tested in the grid search. KS: kernel size, OS: output size, ReLU: Rectiﬁed Linear Unit|
