@@ -89,7 +89,7 @@ The ensemble produced an accuracy of 53.00 % and an F1-score of 68.20 % on the t
 
 |<img src="./img/results/regression_scatter.png" alt="drawing" width="600"/>|
 |:--:|
-|Individual age predictions of the ﬁnal regression model for the recordings in the test data split after recordings labeled with the age of zero were removed from the training and test data split. A linear regression was ﬁtted on the predictions and shown as red line. Optimal predictions would lie on a line with a slope of one (dashed black line). The model was trained for 132 epochs and resulted in a mean squared error (MAE) of 11.5 years on the test data split.|
+|Individual age predictions of the ﬁnal regression model for the recordings in the test data split after recordings labeled with the age of zero were removed from the training and test data split. A linear regression was ﬁtted on the predictions and shown as red line. Optimal predictions would lie on a line with a slope of one (dashed black line). The model was trained for 132 epochs and resulted in a mean absolute error (MAE) of 11.5 years on the test data split.|
 
 
 ### With Transfer Learning
